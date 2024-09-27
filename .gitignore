@@ -1,0 +1,11 @@
+*
+!include/
+!include/**/*
+!lib/
+!lib/**/*
+!src/
+!src/**/*
+!utils/
+!utils/**/*
+!Makefile
+!.gitignore

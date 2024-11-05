@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ialdidi <ialdidi@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 15:07:44 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/03/29 15:36:24 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/10/05 20:30:11 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char	*get_next_line(int fd)
 	static char	*str = NULL;
 	char		*line;
 
-	if (read(fd, NULL, 0) < 0)
+	if (fd < 0 || read(fd, NULL, 0) < 0)
 		return (free(str), str = NULL);
 	if (!str || !ft_strchr(str, '\n'))
 		read_line(fd, &str);

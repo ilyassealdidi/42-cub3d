@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   list.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/26 19:06:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/10/05 20:49:29 by ialdidi          ###   ########.fr       */
+/*   Created: 2024/10/04 19:07:42 by ialdidi           #+#    #+#             */
+/*   Updated: 2024/10/04 19:30:15 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-int main(int ac, char **av)
+int append_item(t_list **lines, void *line)
 {
-    t_game  game;
+	t_list  *new;
 
-    if (ac != 2)
-    {
-        ft_putstr_fd(USAGE, 2);
-        return (1);
-    }
-    if (game_init(&game, av[1]) == FAILURE)
-        return (1);
-    //rungame(&game);
-    return (0);
+	new = ft_lstnew(line);
+	if (!isset(new))
+		return (FAILURE);
+	ft_lstadd_back(lines, new);
+	return (SUCCESS);
 }

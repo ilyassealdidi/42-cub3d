@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   err.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/26 19:06:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/10/05 20:49:29 by ialdidi          ###   ########.fr       */
+/*   Created: 2024/10/04 17:42:27 by ialdidi           #+#    #+#             */
+/*   Updated: 2024/10/05 20:12:32 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-int main(int ac, char **av)
+void    exit_with_error(char *str)
 {
-    t_game  game;
-
-    if (ac != 2)
+    // ft_dprintf(2, "Error\n");
+    ft_putstr_fd("Error\n", 2);
+    if (isset(str))
     {
-        ft_putstr_fd(USAGE, 2);
-        return (1);
+        ft_dprintf(2, "%s", str);
+        exit(ERROR);
     }
-    if (game_init(&game, av[1]) == FAILURE)
-        return (1);
-    //rungame(&game);
-    return (0);
+    perror(NULL);
+    exit(FAILURE);
+}
+
+void    perr(char *str)
+{
+    ft_dprintf(2, "Error\n");
+    if (isset(str))
+        ft_dprintf(2, "%s", str);
+    else
+        perror(NULL);
 }

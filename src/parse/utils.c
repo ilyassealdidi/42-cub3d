@@ -1,28 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/26 19:06:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/10/05 20:49:29 by ialdidi          ###   ########.fr       */
+/*   Created: 2024/10/04 19:31:13 by ialdidi           #+#    #+#             */
+/*   Updated: 2024/10/05 20:36:08 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-int main(int ac, char **av)
+void	set_defaults(t_game *game)
 {
-    t_game  game;
+	errno = 0;
+	ft_memset(game, 0, sizeof(t_game));
+	game->settings.floor = -1;
+	game->settings.ceiling = -1;
+}
 
-    if (ac != 2)
-    {
-        ft_putstr_fd(USAGE, 2);
-        return (1);
-    }
-    if (game_init(&game, av[1]) == FAILURE)
-        return (1);
-    //rungame(&game);
-    return (0);
+void	destroy_and_exit(t_game *game)
+{
+	// ft_lstclear(&game->lines, free);
+	exit(FAILURE);
+}
+
+bool	are_settings_set(t_settings *settings)
+{
+	return (settings->north
+		&& settings->south
+		&& settings->west
+		&& settings->east
+		&& settings->floor != -1
+		&& settings->ceiling != -1);
 }

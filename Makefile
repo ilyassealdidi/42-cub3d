@@ -1,4 +1,4 @@
-SRCS			= $(shell find srcs -name "*.c")
+SRCS			= $(shell find src -name "*.c")
 OBJS_DIR		= obj/
 OBJS 			= $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
 INCS_DIR		= include/
@@ -6,14 +6,14 @@ INCS			= $(INCS_DIR)cub.h $(INCS_DIR)types.h
 LIBFT_DIR		= lib/libft/
 LIBFT			= $(LIBFT_DIR)libft.a
 CFLAGS			= -I$(INCS_DIR) -I$(LIBFT_DIR) 
-CFLAGS			+= -Wall -Werror -Wextra
+CFLAGS			+= -g -fsanitize=address #-Wall -Werror -Wextra
 NAME			= cub3D
 RM				= rm -rf
 
 all:			$(NAME)
 
 $(NAME) : $(OBJS) $(LIBFT)
-	$(CC) $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 
 $(OBJS_DIR)%.o : %.c $(INCS)
 	@mkdir -p $(dir $@)

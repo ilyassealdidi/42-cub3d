@@ -5,7 +5,7 @@
 !lib/**/*
 !src/
 !src/**/*
-!utils/
-!utils/**/*
+!assets/
+!assets/**/*
 !Makefile
 !.gitignore

@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:38:35 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/10/08 19:07:40 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/06 21:03:05 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,65 +23,6 @@ int	get_line_number(t_list *list, char *line)
 		i++;
 	}
 	return (i);
-}
-
-int	open_file(char *filename)
-{
-	int		fd;
-	int		len;
-
-	len = ft_strlen(filename);
-	if (len < 4 || ft_strncmp(filename + len - 4, ".cub", 4))
-		exit_with_error(EFILE);
-	fd = open(filename, O_RDONLY);
-	if (fd == -1)
-		exit_with_error(NULL);
-	return (fd);
-}
-
-int	read_lines(t_list **lines, int fd)
-{
-	char	*line;
-
-	*lines = NULL;
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (line == NULL)
-			break ;
-		if (append_item(lines, line) == FAILURE)
-		{
-			free(line);
-			ft_lstclear(lines, free);
-			return (FAILURE);
-		}
-	}
-	return (SUCCESS);
-}
-
-
-void	print_map_error(t_game *game, char *line, char *error)
-{
-	int	line_number;
-
-	line_number = get_line_number(game->file_lines, line);
-	ft_dprintf(2, RED"Error\n\n"RESET);
-	ft_dprintf(2, "\t%s", error);
-	ft_dprintf(2, "\n\tline: %s:%d\n", game->map.filename, line_number);
-	ft_dprintf(2, RED"\n\t|"RESET" #%d ", line_number);
-	while (*line)
-	{
-		if (*line == ' ')
-			ft_dprintf(2, SPACE);
-		else if (*line == '\n')
-			ft_dprintf(2, NEWLINE);
-		else
-			ft_dprintf(2, "%c", *line);
-		line++;
-	}
-	ft_dprintf(2, "\n\n");
-	ft_dprintf(2, "\tSpaces are presented with a `"SPACE"`\n");
-	ft_dprintf(2, "\tNewlines are presented with a `"NEWLINE"`\n\n");
 }
 
 int	get_number(char *str)
@@ -102,50 +43,6 @@ int	get_number(char *str)
 	if (number > 255)
 		return (ERROR);
 	return (number);
-}
-
-int	get_color(char **rgb)
-{
-	int		color;
-	int		number;
-	int		i;
-
-	color = 0;
-	i = 0;
-	while (i < 3)
-	{
-		number = get_number(rgb[i]);
-		if (number == ERROR)
-			return (ERROR);
-		color = (color << 8) + number;
-		i++;
-	}
-	return (color);
-}
-
-int	parse_color(t_game *game, char *line)
-{
-	char	**rgb;
-	int		color;
-	int		i;
-
-	i = 1;
-	while (line[i] == ' ')
-		i++;
-	line[ft_strlen(line) - 1] = '\0';
-	rgb = ft_split(line + i, ',');
-	if (rgb == NULL)
-		return (FAILURE);
-	color = get_color(rgb);
-	if (color == ERROR)
-		return (print_map_error(game, line, ECOLOR), ERROR);
-	if (*line == 'F' && game->settings.floor == -1)
-		game->settings.floor = color;
-	else if (*line == 'C' && game->settings.ceiling == -1)
-		game->settings.ceiling = color;
-	else
-		return (print_map_error(game, line, "Color already set"), ERROR);
-	return (SUCCESS);
 }
 
 int	parse_texture(t_game *game, char *line)
@@ -189,7 +86,7 @@ int	parse_settings(t_game *game)
 	int		status;
 	t_list	*list;
 
-	list = game->file_lines;
+	list = game->file.lines;
 	status = SUCCESS;
 	while (!are_settings_set(&game->settings) && isset(list))
 	{
@@ -292,46 +189,79 @@ int	set_map(t_game *game, t_list *list)
 	return (SUCCESS);
 }
 
-int	parse_map(t_game *game)
+int	parse(t_game *game)
 {
-	t_list	*list;
-	char	*line;
-	int		i;
-	int		status;
-
-	list = game->map.map;
-	i = 0;
-	while (list != NULL)
-	{
-		line = list->content;
-		if (*line != '\n')
-			break ;
-		list = list->next;
-	}
-	if (list == NULL)
-		return (print_map_error(game, line, "No map found\n"), ERROR);
-	status = set_map(game, list);
-	if (status != SUCCESS)
-		return (ERROR);
-	return (SUCCESS);
+	
 }
 
-int	game_init(t_game *game, char *file)
+void	set_game_file(t_game *game, char *filename)
 {
-	int 	fd;
-	int 	status;
+	int		fd;
+	int		len;
+ 
+	len = ft_strlen(filename);
+	if (len < 4 || ft_strncmp(filename + len - 4, ".cub", 4))
+		exit_with_error(EFILE);
+	game->file.name = filename;
+	fd = open_file(filename);
+	if (fd == -1)
+		perr(filename);
+	game->file.lines = read_file(fd);
+	close(fd);
+	if (errno != 0)
+		perr(NULL);
+}
+
+inline bool	is_color(char *line)
+{
+	return (*line == 'F' || *line == 'C');
+}
+
+inline bool	is_texture(char *line)
+{
+	return (*line == 'N' || *line == 'S' || *line == 'W' || *line == 'E');
+}
+
+inline bool is_color_set(t_settings *settings)
+{
+	return (settings->floor != -1 && settings->ceiling != -1);
+}
+
+inline bool is_texture_set(t_settings *settings)
+{
+	return (settings->north != NULL && settings->south != NULL
+		&& settings->west != NULL && settings->east != NULL);
+}
+
+int	parse_settings(t_game *game)
+{
+	t_list	*color_ptr;
+	t_list	*texture_ptr;
+	t_list	*mapptr;
+	int	x;
+	int	status;
+
+	if (is_color(game->file.lines->content))
+		status = parse_color(game);
+	if (is_texture(game->file.lines->content))
+		status = parse_texture(game);
+	x = is_color_set(&game->settings) + is_texture_set(&game->settings);
+	if (x == 2)
+		return (SUCCESS);
+	if (x == 0)
+		return (print_map_error(game, game->file.lines->content, "Missing Informations\n"), ERROR);
+	if (is_color_set(&game->settings) )
+}
+
+int	game_init(t_game *game, char *filename)
+{
+	int		status;
 
 	set_defaults(game);
-	fd = open_file(file);
-	game->map.filename = file;
-	status = read_lines(&game->file_lines, fd);
+	set_game_file(game, filename);
+	status = parse_settings(game);
 	if (status == SUCCESS)
-	{
-		status = parse_settings(game);
-		if (status == SUCCESS)
-			status = parse_map(game);
-	}
-	close(fd);
-	ft_lstclear(&game->file_lines, free);
+		status = parse_map(game);
+	ft_lstclear(&game->file.lines, free);
 	return (status);
 }

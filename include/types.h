@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:19:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/10/07 18:39:47 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/06 13:56:39 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ typedef struct s_settings
 
 typedef struct s_map
 {
-	char		*filename;
 	t_list		*map;
 	int			width;
 	int			height;
@@ -72,10 +71,23 @@ typedef struct s_player
 	// double	plane;
 }	t_player;
 
+typedef struct s_file
+{
+	char	*name;
+	t_list	*lines;
+}	t_file;
+
+// typedef struct s_line
+// {
+// 	char	*content;
+// 	int		number;
+// 	int		length;
+// }	t_line;
+
 typedef struct s_game
 {
-	void		*mlx;
-	t_list		*file_lines;
+	// void		*mlx;
+	t_file		file;
 	t_settings	settings;
 	t_map		map;
 	t_player	player;

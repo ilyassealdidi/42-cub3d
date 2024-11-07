@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:31:13 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/10/05 20:36:08 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/07 19:58:17 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,3 +35,25 @@ bool	are_settings_set(t_settings *settings)
 		&& settings->floor != -1
 		&& settings->ceiling != -1);
 }
+
+bool	is_color(char *line)
+{
+	return (*line == 'F' || *line == 'C');
+}
+
+bool	is_texture(char *line)
+{
+	return (*line == 'N' || *line == 'S' || *line == 'W' || *line == 'E');
+}
+
+bool is_color_set(t_settings *settings)
+{
+	return (settings->floor != -1 && settings->ceiling != -1);
+}
+
+bool is_texture_set(t_settings *settings)
+{
+	return (settings->north != NULL && settings->south != NULL
+		&& settings->west != NULL && settings->east != NULL);
+}
+

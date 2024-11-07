@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 12:29:06 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/06 12:29:13 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/07 20:42:43 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	parse_map(t_game *game)
 		list = list->next;
 	}
 	if (list == NULL)
-		return (print_map_error(game, line, "No map found\n"), ERROR);
+		return (map_error(game, line, "No map found\n"), ERROR);
 	status = set_map(game, list);
 	if (status != SUCCESS)
 		return (ERROR);

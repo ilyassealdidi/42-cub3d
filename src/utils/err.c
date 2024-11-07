@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:42:27 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/06 13:48:03 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/07 20:51:57 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,19 @@ void    exit_with_error(char *error)
 {
 	ft_putstr_fd("Error\n", 2);
 	ft_dprintf(2, "%s", error);
-	exit(FAILURE);
+	exit(1);
+}
+
+void	clean_exit(t_game *game, int status)
+{
+	free(game->file.name);
+	free(game->settings.north);
+	free(game->settings.south);
+	free(game->settings.west);
+	free(game->settings.east);
+	ft_lstclear(&game->file.lines, free);
+	ft_lstclear(&game->map.map, free);
+	exit(status);
 }
 
 void    perr(char *str)
@@ -25,15 +37,30 @@ void    perr(char *str)
 	perror(str);
 }
 
-void	print_map_error(t_game *game, char *line, char *error)
+int	get_line_number(t_list *list)
 {
-	int	line_number;
+	int		i;
 
-	line_number = get_line_number(game->file_lines, line);
+	i = 0;
+	while (list)
+	{
+		list = list->previous;
+		i++;
+	}
+	return (i);
+}
+
+void	map_error(t_game *game, t_list *node, char *error)
+{
+	int		number;
+	char	*line;
+
+	line = node->content;
+	number = get_line_number(node);
 	ft_dprintf(2, RED"Error\n\n"RESET);
 	ft_dprintf(2, "\t%s", error);
-	ft_dprintf(2, "\n\tline: %s:%d\n", game->map.filename, line_number);
-	ft_dprintf(2, RED"\n\t|"RESET" #%d ", line_number);
+	ft_dprintf(2, "\n\tline: %s:%d\n", game->file.name, number);
+	ft_dprintf(2, RED"\n\t|"RESET" #%d ", number);
 	while (*line)
 	{
 		if (*line == ' ')
@@ -47,4 +74,5 @@ void	print_map_error(t_game *game, char *line, char *error)
 	ft_dprintf(2, "\n\n");
 	ft_dprintf(2, "\tSpaces are presented with a `"SPACE"`\n");
 	ft_dprintf(2, "\tNewlines are presented with a `"NEWLINE"`\n\n");
+	clean_exit(game, 1);
 }

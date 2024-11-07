@@ -6,24 +6,13 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:38:35 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/06 21:03:05 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/07 21:00:23 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-int	get_line_number(t_list *list, char *line)
-{
-	int		i;
 
-	i = 1;
-	while (list->content != line)
-	{
-		list = list->next;
-		i++;
-	}
-	return (i);
-}
 
 int	get_number(char *str)
 {
@@ -69,13 +58,13 @@ int	parse_texture(t_game *game, char *line)
 	else
 	{
 		free(texture);
-		return (print_map_error(game, line, "Texture already set"), ERROR);
+		return (map_error(game, line, "Texture already set"), ERROR);
 	}
 	fd = open(texture, O_RDONLY);
 	if (fd == -1)
 	{
 		free(texture);
-		return (print_map_error(game, line, "Cannot open the file"), ERROR);
+		return (map_error(game, line, "Cannot open the file"), ERROR);
 	}
 	return (SUCCESS);
 }
@@ -99,13 +88,13 @@ int	parse_settings(t_game *game)
 		else if (*line == '\n' && list->previous != NULL)
 			;
 		else
-			return (print_map_error(game, line, "Invalid identifier\n"), ERROR);
+			return (map_error(game, line, "Invalid identifier\n"), ERROR);
 		if (status != SUCCESS)
 			break ;
 		list = list->next;
 	}
 	if (status == SUCCESS && !are_settings_set(&game->settings))
-		return (print_map_error(game, line, "Missing Informations\n"), ERROR);
+		return (map_error(game, line, "Missing Informations\n"), ERROR);
 	game->map.map = list;
 	return (status);
 }
@@ -177,12 +166,12 @@ int	set_map(t_game *game, t_list *list)
 	i = 0;
 	game->map.height = ft_lstsize(list);
 	if (game->map.height < 3)
-		return (print_map_error(game, list->content, "Invalid map\n"), ERROR);
+		return (map_error(game, list->content, "Invalid map\n"), ERROR);
 	while (list != NULL)
 	{
 		line = list->content;
 		if (!is_valid_line(game, list, line))
-			return (print_map_error(game, line, "Invalid map\n"), ERROR);
+			return (map_error(game, line, "Invalid map\n"), ERROR);
 		list = list->next;
 		i++;
 	}
@@ -212,56 +201,30 @@ void	set_game_file(t_game *game, char *filename)
 		perr(NULL);
 }
 
-inline bool	is_color(char *line)
+void	parse_settings(t_game *game)
 {
-	return (*line == 'F' || *line == 'C');
-}
+	t_list	*ptr;
 
-inline bool	is_texture(char *line)
-{
-	return (*line == 'N' || *line == 'S' || *line == 'W' || *line == 'E');
-}
-
-inline bool is_color_set(t_settings *settings)
-{
-	return (settings->floor != -1 && settings->ceiling != -1);
-}
-
-inline bool is_texture_set(t_settings *settings)
-{
-	return (settings->north != NULL && settings->south != NULL
-		&& settings->west != NULL && settings->east != NULL);
-}
-
-int	parse_settings(t_game *game)
-{
-	t_list	*color_ptr;
-	t_list	*texture_ptr;
-	t_list	*mapptr;
-	int	x;
-	int	status;
-
+	ptr = game->file.lines;
 	if (is_color(game->file.lines->content))
-		status = parse_color(game);
-	if (is_texture(game->file.lines->content))
-		status = parse_texture(game);
-	x = is_color_set(&game->settings) + is_texture_set(&game->settings);
-	if (x == 2)
-		return (SUCCESS);
-	if (x == 0)
-		return (print_map_error(game, game->file.lines->content, "Missing Informations\n"), ERROR);
-	if (is_color_set(&game->settings) )
+	{
+		parse_color(game, &ptr);
+		parse_texture(game, &ptr);
+	}
+	else if (is_texture(game->file.lines->content))
+	{
+		parse_texture(game, &ptr);
+		parse_color(game, &ptr);
+	}
+	else
+		map_error(game, ptr->content, "Invalid identifier\n");
 }
 
-int	game_init(t_game *game, char *filename)
+void	game_init(t_game *game, char *filename)
 {
-	int		status;
-
 	set_defaults(game);
 	set_game_file(game, filename);
-	status = parse_settings(game);
-	if (status == SUCCESS)
-		status = parse_map(game);
+	parse_settings(game);
+	parse_map(game);
 	ft_lstclear(&game->file.lines, free);
-	return (status);
 }

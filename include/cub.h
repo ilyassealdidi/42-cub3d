@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 19:07:37 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/06 13:48:52 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/07 20:42:43 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,14 @@ int		game_init(t_game *game, char *file);
 /*		Error handling		*/
 void	perr(char *str);
 void    exit_with_error(char *str);
-void	print_map_error(t_game *game, char *line, char *error);
+void	map_error(t_game *game, char *line, char *error);
 
 /*		Utils				*/
-bool    isset(void *ptr);
+bool	isset(void *ptr);
+bool	is_color(char *line);
+bool	is_texture(char *line);
+bool	is_color_set(t_settings *settings);
+bool	is_texture_set(t_settings *settings);
 
 /*		Linked list			*/
 int     append_item(t_list **lines, void *line);

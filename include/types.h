@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:19:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/06 13:56:39 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/08 19:53:53 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ typedef struct s_game
 	t_settings	settings;
 	t_map		map;
 	t_player	player;
+	t_list		*current_line;
 }	t_game;
 
 #endif

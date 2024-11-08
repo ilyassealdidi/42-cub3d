@@ -6,13 +6,11 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:38:35 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/07 21:00:23 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/08 20:56:24 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
-
-
 
 int	get_number(char *str)
 {
@@ -58,7 +56,7 @@ int	parse_texture(t_game *game, char *line)
 	else
 	{
 		free(texture);
-		return (map_error(game, line, "Texture already set"), ERROR);
+		map_error(game, line, "Texture already set");
 	}
 	fd = open(texture, O_RDONLY);
 	if (fd == -1)
@@ -69,7 +67,7 @@ int	parse_texture(t_game *game, char *line)
 	return (SUCCESS);
 }
 
-int	parse_settings(t_game *game)
+int		parse_settings(t_game *game)
 {
 	char	*line;
 	int		status;
@@ -88,13 +86,13 @@ int	parse_settings(t_game *game)
 		else if (*line == '\n' && list->previous != NULL)
 			;
 		else
-			return (map_error(game, line, "Invalid identifier\n"), ERROR);
+			map_error(game, line, "Invalid identifier\n");
 		if (status != SUCCESS)
 			break ;
 		list = list->next;
 	}
 	if (status == SUCCESS && !are_settings_set(&game->settings))
-		return (map_error(game, line, "Missing Informations\n"), ERROR);
+		map_error(game, line, "Missing Informations\n");
 	game->map.map = list;
 	return (status);
 }
@@ -132,7 +130,7 @@ bool	is_valid_line(t_game *game, t_list *list, char *line)
 		return (false);
 	if ((ft_strchr(" 1", ((char *)(list->previous->content))[0]) == NULL || list->next == NULL)
 		&& ft_strspn(line, " 1") != ft_strlen(line))
-		return (false); //kanmooooot 3lik azine dyali
+		return (false);
 	if (list->next != NULL && list->previous != NULL)
 	{
 		i = 0;
@@ -166,21 +164,16 @@ int	set_map(t_game *game, t_list *list)
 	i = 0;
 	game->map.height = ft_lstsize(list);
 	if (game->map.height < 3)
-		return (map_error(game, list->content, "Invalid map\n"), ERROR);
+		map_error(game, list->content, "Invalid map\n");
 	while (list != NULL)
 	{
 		line = list->content;
 		if (!is_valid_line(game, list, line))
-			return (map_error(game, line, "Invalid map\n"), ERROR);
+			map_error(game, line, "Invalid map\n");
 		list = list->next;
 		i++;
 	}
 	return (SUCCESS);
-}
-
-int	parse(t_game *game)
-{
-	
 }
 
 void	set_game_file(t_game *game, char *filename)
@@ -204,17 +197,15 @@ void	set_game_file(t_game *game, char *filename)
 void	parse_settings(t_game *game)
 {
 	t_list	*ptr;
+	void (*func[2])(t_game *, t_list **);
 
+	func[0] = parse_colors;
+	func[1] = parse_textures;
 	ptr = game->file.lines;
-	if (is_color(game->file.lines->content))
+	if (is_color(game->file.lines->content) || is_texture(game->file.lines->content))
 	{
-		parse_color(game, &ptr);
-		parse_texture(game, &ptr);
-	}
-	else if (is_texture(game->file.lines->content))
-	{
-		parse_texture(game, &ptr);
-		parse_color(game, &ptr);
+		func[is_texture(game->file.lines->content)](game, &ptr);
+		func[is_color(game->file.lines->content)](game, &ptr);
 	}
 	else
 		map_error(game, ptr->content, "Invalid identifier\n");

@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:31:13 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/07 19:58:17 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/08 21:51:14 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,17 @@ bool	are_settings_set(t_settings *settings)
 
 bool	is_color(char *line)
 {
-	return (*line == 'F' || *line == 'C');
+	if (line == NULL)
+		return (false);
+	return (ft_strncmp(line, "F ", 2) == 0 || ft_strncmp(line, "C ", 2) == 0);
 }
 
 bool	is_texture(char *line)
 {
-	return (*line == 'N' || *line == 'S' || *line == 'W' || *line == 'E');
+	if (line == NULL)
+		return (false);
+	return (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0
+		|| ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0);
 }
 
 bool is_color_set(t_settings *settings)

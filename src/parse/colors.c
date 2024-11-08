@@ -6,13 +6,13 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:49:42 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/07 20:53:45 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/08 23:03:58 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-int	get_color(char **rgb)
+static int	get_color(char **rgb)
 {
 	int		color;
 	int		number;
@@ -31,43 +31,19 @@ int	get_color(char **rgb)
 	return (color);
 }
 
-inline bool	is_color(char *line)
+void	parse_color(t_game *game, t_list *node)
 {
-	return (*line == 'F' || *line == 'C');
-}
-
-int	parse_color(t_game *game, t_list **list)
-{
-	t_list	*tmp;
-	char	**rgb;
 	char	*line;
 	int		color;
-	int		i;
+	char	**rgb;
 
-	tmp = *list;
-	if (is_texture_set(&game->settings))
-	{
-		while (tmp)
-		{
-			if (*((char *)(tmp->content)) != '\n')
-				break ;
-			tmp = tmp->next;
-		}
-		if (tmp == *list)
-			map_error(game, tmp, "Expected new line");
-	}
-	line = tmp->content;
-	if (!is_color(line))
-		map_error(game, tmp, "Invalid color identifier");
-	i = 1;
-	while (line[i] == ' ')
-		i++;
-	if (i == 1)
-		map_error(game, tmp, "Type of information from an element must be separated by one or more space(s)");
+	line = ft_strchr(node->content, ' ') + 1;
+	while (*line == ' ')
+		line++;
 	line[ft_strlen(line) - 1] = '\0';
-	rgb = ft_split(line + i, ',');
+	rgb = ft_split(line, ',');
 	if (rgb == NULL)
-		return (FAILURE);
+		clean_exit(game, 1);
 	color = get_color(rgb);
 	if (color == ERROR)
 		map_error(game, line, ECOLOR);
@@ -76,6 +52,33 @@ int	parse_color(t_game *game, t_list **list)
 	else if (*line == 'C' && game->settings.ceiling == -1)
 		game->settings.ceiling = color;
 	else
-		return (map_error(game, line, "Color already set"), ERROR);
+		map_error(game, line, "Color already set");
+}
+
+int	parse_colors(t_game *game, t_list **list)
+{
+	t_list	*tmp;
+
+	ft_printf("Parsing colors\n");
+	tmp = *list;
+	if (is_texture_set(&game->settings))
+	{
+		if (*((char *)(tmp->content)) != '\n')
+			map_error(game, tmp, "Expected empty line");
+		while (tmp)
+		{
+			if (*((char *)(tmp->content)) != '\n')
+				break ;
+			tmp = tmp->next;
+		}
+		if (tmp == *list)
+			map_error(game, tmp, "type of element must be separated by one or more empty line(s)");
+		if (!is_color(tmp->content))
+			map_error(game, tmp, "Invalid identifier");
+	}
+	parse_color(game, tmp);
+	if (tmp->next == NULL || !is_color(tmp->next->content))
+		map_error(game, tmp, "Invalid identifier");
+	parse_color(game, tmp->next);
 	return (SUCCESS);
 }

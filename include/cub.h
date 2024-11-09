@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 19:07:37 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/07 20:42:43 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/09 19:04:01 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 void	set_defaults(t_game *game);
 bool	are_settings_set(t_settings *settings);
 int		game_init(t_game *game, char *file);
+void	parse_textures(t_game *game, char *line);
+void	parse_colors(t_game *game, t_list **list);
 
 /*		Error handling		*/
 void	perr(char *str);

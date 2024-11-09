@@ -6,11 +6,31 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:49:42 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/08 23:03:58 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/09 19:03:42 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
+
+int	get_number(char *str)
+{
+	int		number;
+	int		i;
+
+	if (str == NULL)
+		return (ERROR);
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (ERROR);
+		i++;
+	}
+	number = ft_atol(str);
+	if (number > 255)
+		return (ERROR);
+	return (number);
+}
 
 static int	get_color(char **rgb)
 {
@@ -55,7 +75,7 @@ void	parse_color(t_game *game, t_list *node)
 		map_error(game, line, "Color already set");
 }
 
-int	parse_colors(t_game *game, t_list **list)
+void	parse_colors(t_game *game, t_list **list)
 {
 	t_list	*tmp;
 
@@ -80,5 +100,4 @@ int	parse_colors(t_game *game, t_list **list)
 	if (tmp->next == NULL || !is_color(tmp->next->content))
 		map_error(game, tmp, "Invalid identifier");
 	parse_color(game, tmp->next);
-	return (SUCCESS);
 }

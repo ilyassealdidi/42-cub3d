@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:19:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/08 19:53:53 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/09 19:02:45 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define USAGE "Usage: ./cub3D [map.cub]\n"
 
 # define EOPEN "Can't open file\n"
+# define EEMPTY "Empty file\n"
 # define ECLOSE "Can't close file\n"
 # define EFILE "Allowed files: *.cub\n"
 # define EMAP "Invalid map\n"

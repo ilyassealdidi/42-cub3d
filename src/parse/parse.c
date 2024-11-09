@@ -6,66 +6,11 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:38:35 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/08 20:56:24 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/09 19:02:51 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
-
-int	get_number(char *str)
-{
-	int		number;
-	int		i;
-
-	if (str == NULL)
-		return (ERROR);
-	i = 0;
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (ERROR);
-		i++;
-	}
-	number = ft_atol(str);
-	if (number > 255)
-		return (ERROR);
-	return (number);
-}
-
-int	parse_texture(t_game *game, char *line)
-{
-	char	*texture;
-	int		fd;
-	int		i;
-
-	i = 2;
-	while (line[i] == ' ')
-		i++;
-	line[ft_strlen(line) - 1] = '\0';
-	texture = ft_strdup(line + i);
-	if (texture == NULL)
-		return (FAILURE);
-	if (*line == 'N' && game->settings.north == NULL)
-		game->settings.north = texture;
-	else if (*line == 'S' && game->settings.south == NULL)
-		game->settings.south = texture;
-	else if (*line == 'W' && game->settings.west == NULL)
-		game->settings.west = texture;
-	else if (*line == 'E' && game->settings.east == NULL)
-		game->settings.east = texture;
-	else
-	{
-		free(texture);
-		map_error(game, line, "Texture already set");
-	}
-	fd = open(texture, O_RDONLY);
-	if (fd == -1)
-	{
-		free(texture);
-		return (map_error(game, line, "Cannot open the file"), ERROR);
-	}
-	return (SUCCESS);
-}
 
 int		parse_settings(t_game *game)
 {
@@ -215,6 +160,8 @@ void	game_init(t_game *game, char *filename)
 {
 	set_defaults(game);
 	set_game_file(game, filename);
+	if (game->file.lines == NULL)
+		exit_with_error(EEMPTY);
 	parse_settings(game);
 	parse_map(game);
 	ft_lstclear(&game->file.lines, free);

@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:42:27 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/07 20:51:57 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/10 12:18:44 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,6 @@ void    exit_with_error(char *error)
 	ft_putstr_fd("Error\n", 2);
 	ft_dprintf(2, "%s", error);
 	exit(1);
-}
-
-void	clean_exit(t_game *game, int status)
-{
-	free(game->file.name);
-	free(game->settings.north);
-	free(game->settings.south);
-	free(game->settings.west);
-	free(game->settings.east);
-	ft_lstclear(&game->file.lines, free);
-	ft_lstclear(&game->map.map, free);
-	exit(status);
 }
 
 void    perr(char *str)

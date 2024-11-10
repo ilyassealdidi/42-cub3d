@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:49:42 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/09 19:03:42 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/10 16:01:38 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ void	parse_color(t_game *game, t_list *node)
 		clean_exit(game, 1);
 	color = get_color(rgb);
 	if (color == ERROR)
-		map_error(game, line, ECOLOR);
-	if (*line == 'F' && game->settings.floor == -1)
+		map_error(game, node, ECOLOR);
+	if (((char *)node->content)[0] == 'F' && game->settings.floor == -1)
 		game->settings.floor = color;
-	else if (*line == 'C' && game->settings.ceiling == -1)
+	else if (((char *)node->content)[0] == 'C' && game->settings.ceiling == -1)
 		game->settings.ceiling = color;
 	else
-		map_error(game, line, "Color already set");
+		map_error(game, node, "Color already set");
 }
 
 void	parse_colors(t_game *game, t_list **list)

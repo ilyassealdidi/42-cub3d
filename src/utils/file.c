@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:26:12 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/06 12:11:16 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/10 15:50:09 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_list	*read_file(int fd)
 	char	*line;
 	t_list	*head;
 
+	head = NULL;
 	while (1)
 	{
 		line = get_next_line(fd);

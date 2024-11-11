@@ -6,21 +6,12 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:26:12 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/10 15:50:09 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/11 20:58:44 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-int	open_file(char *filename)
-{
-	int		len;
-
-	len = ft_strlen(filename);
-	if (len < 4 || ft_strncmp(filename + len - 4, ".cub", 4))
-		return (-1);
-	return (open(filename, O_RDONLY));
-}
 
 t_list	*read_file(int fd)
 {

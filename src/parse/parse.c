@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:38:35 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/10 15:50:56 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/12 00:51:43 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,15 +128,19 @@ void	set_game_file(t_game *game, char *filename)
  
 	len = ft_strlen(filename);
 	if (len < 4 || ft_strncmp(filename + len - 4, ".cub", 4))
-		exit_with_error(EFILE);
-	game->file.name = filename;
-	fd = open_file(filename);
+		exit_with_error(game, EFILE);
+	game->file.name = ft_strdup(filename);
+	if (game->file.name == NULL)
+		exit_with_error(game, NULL);
 	if (fd == -1)
-		perr(filename);
+		exit_with_error(game, EOPEN);
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		exit_with_error(game, filename);
 	game->file.lines = read_file(fd);
 	close(fd);
 	if (errno != 0)
-		exit_with_error(strerror(errno));
+		exit_with_error(game, NULL);
 }
 
 void	parse_settings(t_game *game)
@@ -150,10 +154,16 @@ void	parse_settings(t_game *game)
 	if (is_color(game->file.lines->content) || is_texture(game->file.lines->content))
 	{
 		func[is_texture(game->file.lines->content)](game, &ptr);
+		while (ptr)
+		{
+			if (*((char *)(ptr->content)) != '\n')
+				break ;
+			ptr = ptr->next;
+		}
 		func[is_color(game->file.lines->content)](game, &ptr);
 	}
 	else
-		map_error(game, ptr->content, "Invalid identifier\n");
+		map_error(game, ptr, "Invalid identifier\n");
 }
 
 void	game_init(t_game *game, char *filename)
@@ -161,7 +171,7 @@ void	game_init(t_game *game, char *filename)
 	set_defaults(game);
 	set_game_file(game, filename);
 	if (game->file.lines == NULL)
-		exit_with_error(EEMPTY);
+		exit_with_error(game, EEMPTY);
 	parse_settings(game);
 	// parse_map(game);
 	ft_lstclear(&game->file.lines, free);

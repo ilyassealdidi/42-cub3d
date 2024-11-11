@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 19:07:37 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/10 12:27:15 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/11 22:51:10 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ void	parse_colors(t_game *game, t_list **list);
 void	game_init(t_game *game, char *filename);
 
 /*		Error handling		*/
-void	perr(char *str);
-void    exit_with_error(char *str);
+void    exit_with_error(t_game *game, char *str);
 void	map_error(t_game *game, t_list *node, char *error);
 
 /*		Utils				*/

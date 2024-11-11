@@ -6,23 +6,20 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:42:27 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/10 12:18:44 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/11 22:53:40 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-void    exit_with_error(char *error)
+void    exit_with_error(t_game *game, char *error)
 {
 	ft_putstr_fd("Error\n", 2);
-	ft_dprintf(2, "%s", error);
-	exit(1);
-}
-
-void    perr(char *str)
-{
-    ft_dprintf(2, "Error\n");
-	perror(str);
+	if (error)
+		ft_putendl_fd(error, 2);
+	else
+		perror(NULL);
+	clean_exit(game, 1);
 }
 
 int	get_line_number(t_list *list)

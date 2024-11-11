@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:19:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/09 19:02:45 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/11 23:03:37 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 # define EOPEN "Can't open file\n"
 # define EEMPTY "Empty file\n"
+# define ESEP "Expected empty line\n"
 # define ECLOSE "Can't close file\n"
 # define EFILE "Allowed files: *.cub\n"
 # define EMAP "Invalid map\n"

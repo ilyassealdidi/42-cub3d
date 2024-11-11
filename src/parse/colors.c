@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:49:42 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/10 16:01:38 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/12 00:53:25 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	get_number(char *str)
 	return (number);
 }
 
-static int	get_color(char **rgb)
+static t_color	get_color(char **rgb)
 {
-	int		color;
+	t_color	color;
 	int		number;
 	int		i;
 
@@ -51,7 +51,7 @@ static int	get_color(char **rgb)
 	return (color);
 }
 
-void	parse_color(t_game *game, t_list *node)
+static void	parse_color(t_game *game, t_list *node)
 {
 	char	*line;
 	int		color;
@@ -77,27 +77,28 @@ void	parse_color(t_game *game, t_list *node)
 
 void	parse_colors(t_game *game, t_list **list)
 {
-	t_list	*tmp;
+	t_list	*node;
 
-	ft_printf("Parsing colors\n");
-	tmp = *list;
+	ft_printf(GREEN"Parsing colors\n"RESET);
+	node = *list;
 	if (is_texture_set(&game->settings))
 	{
-		if (*((char *)(tmp->content)) != '\n')
-			map_error(game, tmp, "Expected empty line");
-		while (tmp)
+		if (*((char *)(node->content)) != '\n')
+			map_error(game, node, ESEP);
+		while (node)
 		{
-			if (*((char *)(tmp->content)) != '\n')
+			if (*((char *)(node->content)) != '\n')
 				break ;
-			tmp = tmp->next;
+			node = node->next;
 		}
-		if (tmp == *list)
-			map_error(game, tmp, "type of element must be separated by one or more empty line(s)");
-		if (!is_color(tmp->content))
-			map_error(game, tmp, "Invalid identifier");
+		if (!is_color(node->content))
+			map_error(game, node, "Invalid identifier");
 	}
-	parse_color(game, tmp);
-	if (tmp->next == NULL || !is_color(tmp->next->content))
-		map_error(game, tmp, "Invalid identifier");
-	parse_color(game, tmp->next);
+	parse_color(game, node);
+	if (node->next == NULL)
+		exit_with_error(game, "Missing color");
+	if (!is_color(node->next->content))
+		map_error(game, node->next, "Invalid identifier");
+	parse_color(game, node->next);
+	*list = node->next->next;
 }

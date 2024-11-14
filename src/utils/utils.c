@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:28:16 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/10 12:18:04 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/14 13:08:25 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,20 @@ void	clean_exit(t_game *game, int status)
 	free(game->settings.west);
 	free(game->settings.east);
 	ft_lstclear(&game->file.lines, free);
-	ft_lstclear(&game->map.map, free);
+	if (game->map.map != NULL)
+		free_array(game->map.map);
 	exit(status);
+}
+
+void	free_array(char **array)
+{
+	int		i;
+
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
 }

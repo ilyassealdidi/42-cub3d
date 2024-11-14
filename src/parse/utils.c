@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:31:13 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/10 12:27:46 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/14 13:05:43 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,9 @@
 
 void	set_defaults(t_game *game)
 {
-	errno = 0;
 	ft_memset(game, 0, sizeof(t_game));
 	game->settings.floor = -1;
 	game->settings.ceiling = -1;
-}
-
-bool	are_settings_set(t_settings *settings)
-{
-	return (settings->north
-		&& settings->south
-		&& settings->west
-		&& settings->east
-		&& settings->floor != -1
-		&& settings->ceiling != -1);
 }
 
 bool	is_color(char *line)
@@ -41,8 +30,10 @@ bool	is_texture(char *line)
 {
 	if (line == NULL)
 		return (false);
-	return (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0
-		|| ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0);
+	return (ft_strncmp(line, "NO ", 3) == 0
+		|| ft_strncmp(line, "SO ", 3) == 0
+		|| ft_strncmp(line, "WE ", 3) == 0
+		|| ft_strncmp(line, "EA ", 3) == 0);
 }
 
 bool is_color_set(t_settings *settings)

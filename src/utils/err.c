@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:42:27 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/11 22:53:40 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/14 13:15:20 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 void    exit_with_error(t_game *game, char *error)
 {
-	ft_putstr_fd("Error\n", 2);
+	ft_dprintf(2, ERROR_HEAD);
 	if (error)
 		ft_putendl_fd(error, 2);
 	else
 		perror(NULL);
+	ft_putchar_fd('\n', 2);
 	clean_exit(game, 1);
 }
 
@@ -42,22 +43,23 @@ void	map_error(t_game *game, t_list *node, char *error)
 
 	line = node->content;
 	number = get_line_number(node);
-	ft_dprintf(2, RED"Error\n\n"RESET);
-	ft_dprintf(2, "\t%s", error);
-	ft_dprintf(2, "\n\tline: %s:%d\n", game->file.name, number);
-	ft_dprintf(2, RED"\n\t|"RESET" #%d ", number);
-	while (*line)
+	ft_dprintf(2, ERROR_HEAD);
+	ft_dprintf(2, "%s ", error);
+	ft_dprintf(2, "at: %s:%d\n", game->file.name, number);
+	if (ft_strlen(line))
 	{
-		if (*line == ' ')
-			ft_dprintf(2, SPACE);
-		else if (*line == '\n')
-			ft_dprintf(2, NEWLINE);
-		else
-			ft_dprintf(2, "%c", *line);
-		line++;
+		ft_dprintf(2, "\n");
+		ft_dprintf(2, BRIGHT_GRAY"#%d "RESET"", number);
+		while (*line)
+		{
+			if (*line == ' ')
+				ft_dprintf(2, SPACE);
+			else
+				ft_dprintf(2, "%c", *line);
+			line++;
+		}
+		ft_dprintf(2, "\n");
 	}
-	ft_dprintf(2, "\n\n");
-	ft_dprintf(2, "\tSpaces are presented with a `"SPACE"`\n");
-	ft_dprintf(2, "\tNewlines are presented with a `"NEWLINE"`\n\n");
+	ft_dprintf(2, "\n");
 	clean_exit(game, 1);
 }

@@ -6,13 +6,13 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:49:42 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/12 00:53:25 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/14 13:13:38 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-int	get_number(char *str)
+static int	get_number(char *str)
 {
 	int		number;
 	int		i;
@@ -53,18 +53,18 @@ static t_color	get_color(char **rgb)
 
 static void	parse_color(t_game *game, t_list *node)
 {
-	char	*line;
+	char	*ptr;
 	int		color;
 	char	**rgb;
 
-	line = ft_strchr(node->content, ' ') + 1;
-	while (*line == ' ')
-		line++;
-	line[ft_strlen(line) - 1] = '\0';
-	rgb = ft_split(line, ',');
+	ptr = node->content + 2 + ft_strspn(node->content + 2, " ");
+	if (!ft_isdigit(*ptr) || !ft_isdigit(ft_strchr(ptr, '\0')[-1]))
+		map_error(game, node, ECOLOR);
+	rgb = ft_split(ptr, ',');
 	if (rgb == NULL)
 		clean_exit(game, 1);
 	color = get_color(rgb);
+	free_array(rgb);
 	if (color == ERROR)
 		map_error(game, node, ECOLOR);
 	if (((char *)node->content)[0] == 'F' && game->settings.floor == -1)
@@ -72,33 +72,24 @@ static void	parse_color(t_game *game, t_list *node)
 	else if (((char *)node->content)[0] == 'C' && game->settings.ceiling == -1)
 		game->settings.ceiling = color;
 	else
-		map_error(game, node, "Color already set");
+		map_error(game, node, ECOLORSET);
 }
 
 void	parse_colors(t_game *game, t_list **list)
 {
-	t_list	*node;
+	int		i;
 
-	ft_printf(GREEN"Parsing colors\n"RESET);
-	node = *list;
-	if (is_texture_set(&game->settings))
+	i = 0;
+	while (i < 2 && *list != NULL)
 	{
-		if (*((char *)(node->content)) != '\n')
-			map_error(game, node, ESEP);
-		while (node)
-		{
-			if (*((char *)(node->content)) != '\n')
-				break ;
-			node = node->next;
-		}
-		if (!is_color(node->content))
-			map_error(game, node, "Invalid identifier");
+		if (ft_strlen((*list)->content) == 0)
+			map_error(game, *list, EMISSCOLOR);
+		if (!is_color((*list)->content))
+			map_error(game, *list, EIDENTIFIER);
+		parse_color(game, *list);
+		*list = (*list)->next;
+		i++;
 	}
-	parse_color(game, node);
-	if (node->next == NULL)
-		exit_with_error(game, "Missing color");
-	if (!is_color(node->next->content))
-		map_error(game, node->next, "Invalid identifier");
-	parse_color(game, node->next);
-	*list = node->next->next;
+	if (!is_color_set(&game->settings))
+		exit_with_error(game, EMISSCOLOR);
 }

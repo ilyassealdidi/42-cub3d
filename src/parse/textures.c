@@ -6,69 +6,56 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 12:17:09 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/12 00:53:47 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/12 13:10:40 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-void	parse_texture(t_game *game, t_list *node)
+static char	*parse_texture(t_game *game, t_list *node)
 {
+	char	*texture;
 	char	*line;
-	int		fd;
-	int		i;
 
-	i = 2;
-	while (line[i] == ' ')
-		i++;
-	line[ft_strlen(line) - 1] = '\0';
-	texture = ft_strdup(line + i);
+	line = ft_strrchr(node->content, ' ') + 1;
+	texture = ft_strdup(line);
 	if (texture == NULL)
-		clean_exit(game, EXIT_FAILURE);
-	if (*line == 'N' && game->settings.north == NULL)
+		exit_with_error(game, NULL);
+	if (*(char *)(node->content) == 'N' && game->settings.north == NULL)
 		game->settings.north = texture;
-	else if (*line == 'S' && game->settings.south == NULL)
+	else if (*(char *)(node->content) == 'S' && game->settings.south == NULL)
 		game->settings.south = texture;
-	else if (*line == 'W' && game->settings.west == NULL)
+	else if (*(char *)(node->content) == 'W' && game->settings.west == NULL)
 		game->settings.west = texture;
-	else if (*line == 'E' && game->settings.east == NULL)
+	else if (*(char *)(node->content) == 'E' && game->settings.east == NULL)
 		game->settings.east = texture;
 	else
 	{
 		free(texture);
-		map_error(game, line, "Texture already set");
+		map_error(game, node, ETEXSET);
 	}
-	fd = open(texture, O_RDONLY);
-	if (fd == -1)
-	{
-		free(texture);
-		map_error(game, line, "Cannot open the file");
-	}
+	return (texture);
 }
 
 void	parse_textures(t_game *game, t_list **list)
 {
-	t_list	*node;
+	int		fd;
+	int		i;
 
-	ft_printf(GREEN"Parsing textures\n"RESET);
-	node = *list;
-	if (is_color_set(&game->settings))
+	i = 0;
+	while (i < 4 && *list != NULL)
 	{
-		if (*((char *)(node->content)) != '\n')
-			map_error(game, node, ESEP);
-		while (node)
-		{
-			if (*((char *)(node->content)) != '\n')
-				break ;
-			node = node->next;
-		}
-		if (!is_texture(node->content))
-			map_error(game, node, "Invalid identifier\n");
+		if (ft_strlen((*list)->content) == 0)
+			map_error(game, *list, EMISSTEX);
+		if (!is_texture((*list)->content))
+			map_error(game, *list, EIDENTIFIER);
+		fd = open(parse_texture(game, *list), O_RDONLY);
+		if (fd == -1)
+			map_error(game, *list, EOPEN);
+		close(fd);
+		*list = (*list)->next;
+		i++;
 	}
-	parse_texture(game, node);
-	if (node->next == NULL)
-		exit_with_error(game, "Missing texture");
-	if (!is_texture(node->next->content))
-		map_error(game, node->next, "Invalid identifier");
-	*list = node->next->next;
+	if (!is_texture_set(&game->settings))
+		exit_with_error(game, EMISSTEX);
 }

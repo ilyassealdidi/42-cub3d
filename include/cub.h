@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 19:07:37 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/11 22:51:10 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/14 13:02:13 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@
 
 /*		Parse				*/
 void	set_defaults(t_game *game);
-bool	are_settings_set(t_settings *settings);
-void	parse_settings(t_game *game);
+void	parse_settings(t_game *game, t_list **ptr);
 void	parse_textures(t_game *game, t_list **list);
 void	parse_colors(t_game *game, t_list **list);
+void	parse_map(t_game *game, t_list **list);
 void	game_init(t_game *game, char *filename);
 
 /*		Error handling		*/
@@ -34,6 +34,7 @@ void    exit_with_error(t_game *game, char *str);
 void	map_error(t_game *game, t_list *node, char *error);
 
 /*		Utils				*/
+void	free_array(char **array);
 void	clean_exit(t_game *game, int status);
 bool	isset(void *ptr);
 bool	is_color(char *line);
@@ -46,6 +47,7 @@ int 	ft_lstappend(t_list **lines, void *content);
 
 /*		File utils			*/
 t_list	*read_file(int fd);
-int		open_file(char *filename);
+void	file_error(t_game *game, char *filename);
+
 
 #endif

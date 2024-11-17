@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 19:06:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/14 13:03:42 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/17 11:33:04 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int main(int ac, char **av)
 		ft_putstr_fd(USAGE, 2);
         return (EXIT_FAILURE);
 	}
-	
     game_init(&game, av[1]);
-    // rungame(&game);
+    rungame(&game);
 }

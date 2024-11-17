@@ -4,16 +4,17 @@ OBJS 			= $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
 INCS_DIR		= include/
 INCS			= $(INCS_DIR)cub.h $(INCS_DIR)types.h
 LIBFT_DIR		= lib/libft/
+MLX_DIR			= lib/MLX42/
 LIBFT			= $(LIBFT_DIR)libft.a
-CFLAGS			= -I$(INCS_DIR) -I$(LIBFT_DIR) 
-CFLAGS			+= -g -fsanitize=address #-Wall -Werror -Wextra
+MLX				= $(MLX_DIR)build/libmlx42.a
+CFLAGS			= -I$(INCS_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)include/MLX42
+CFLAGS			+= -g -fsanitize=address  #l -Werror -Wextra -Wunreachable-code
 NAME			= cub3D
 RM				= rm -rf
-
 all:			$(NAME)
 
 $(NAME) : $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -framework Cocoa -framework OpenGL -framework IOKit  -lglfw3 -L"/Users/$(USER)/.brew/opt/glfw/lib/" $(MLX) -o $(NAME)
 
 $(OBJS_DIR)%.o : %.c $(INCS)
 	@mkdir -p $(dir $@)

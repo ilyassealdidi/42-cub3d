@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:31:13 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/14 13:05:43 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/17 11:03:33 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	set_defaults(t_game *game)
 {
+	errno = 0;
 	ft_memset(game, 0, sizeof(t_game));
 	game->settings.floor = -1;
 	game->settings.ceiling = -1;

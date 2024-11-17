@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:19:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/14 11:48:29 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/17 12:20:44 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,12 @@
 
 # define RESET "\033[m"
 
+# define WIDTH 1200
+# define HEIGHT 720
+# define TILE_SIZE 30
+# define FOV 60
+# define SPEED 5
+
 typedef unsigned char	t_byte;
 typedef int				t_color;
 
@@ -64,6 +70,12 @@ typedef struct s_settings
 	t_color		ceiling;
 }	t_settings;
 
+typedef struct s_point
+{
+	double		x;
+	double		y;
+}	t_point;
+
 typedef struct s_map
 {
 	char		**map;
@@ -73,9 +85,8 @@ typedef struct s_map
 
 typedef struct s_player
 {
-	double	x;
-	double	y;
-	// double	dir;
+	t_point		pos;
+	double		dir;
 	// double	plane;
 }	t_player;
 
@@ -85,16 +96,15 @@ typedef struct s_file
 	t_list	*lines;
 }	t_file;
 
-// typedef struct s_line
-// {
-// 	char	*content;
-// 	int		number;
-// 	int		length;
-// }	t_line;
+typedef struct s_mlx
+{
+	mlx_t		*mlx;
+	mlx_image_t	*img;
+}	t_mlx;
 
 typedef struct s_game
 {
-	// void		*mlx;
+	t_mlx		mlx;
 	t_file		file;
 	t_settings	settings;
 	t_map		map;

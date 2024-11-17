@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 12:29:06 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/14 13:31:52 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/17 12:24:04 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,38 @@ void	set_map(t_game *game, t_list *list)
 		exit_with_error(game, NULL);
 }
 
+void	set_angle(t_player *player, char c)
+{
+	if (c == 'N')
+		player->dir = 3 * M_PI_2;
+	else if (c == 'S')
+		player->dir = M_PI_2;
+	else if (c == 'W')
+		player->dir = M_PI;
+	else if (c == 'E')
+		player->dir = 0;
+}
+
+void	set_player_pos(t_game *game)
+{
+	int		i;
+	char	*ptr;
+
+	i = 0;
+	while (game->map.map[i])
+	{
+		ptr = ft_strpbrk(game->map.map[i], "NSEW");
+		if (ptr != NULL)
+		{
+			set_angle(&game->player, *ptr);
+			game->player.pos.x = (ptr - game->map.map[i]) * TILE_SIZE + TILE_SIZE / 2;
+			game->player.pos.y = i * TILE_SIZE + TILE_SIZE / 2;
+			return ;
+		}
+		i++;
+	}
+}
+
 void	parse_map(t_game *game, t_list **list)
 {
 	while (*list != NULL && ft_strlen((*list)->content) == 0)
@@ -95,6 +127,7 @@ void	parse_map(t_game *game, t_list **list)
 	if (*list == NULL)
 		exit_with_error(game, EMISSMAP);
 	set_map(game, *list);
+	set_player_pos(game);
 	if (is_valid_map(&game->map) == FAILURE)
 		exit_with_error(game, EINVALIDMAP);
 }

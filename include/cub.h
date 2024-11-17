@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 19:07:37 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/14 13:02:13 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/17 11:11:52 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <libft.h>
 # include <math.h>
 # include <stdbool.h>
+# include <MLX42.h>
 # include <stdio.h>
 # include <errno.h>
 # include <fcntl.h>
@@ -28,6 +29,9 @@ void	parse_textures(t_game *game, t_list **list);
 void	parse_colors(t_game *game, t_list **list);
 void	parse_map(t_game *game, t_list **list);
 void	game_init(t_game *game, char *filename);
+
+/*		Graphics			*/
+void	rungame(t_game *game);
 
 /*		Error handling		*/
 void    exit_with_error(t_game *game, char *str);

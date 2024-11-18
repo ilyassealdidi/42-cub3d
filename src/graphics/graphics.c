@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   graphics.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:16:54 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/17 17:51:24 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/18 15:41:51 by gmalyana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	render_map(t_game *game)
 		j = 0;
 		while (j < game->map.width * TILE_SIZE)
 		{
-			if (ft_memchr("NSWE0 ", game->map.map[i / TILE_SIZE][j / TILE_SIZE], 6))
+			if (ft_strchr("NSWE0 ", game->map.map[i / TILE_SIZE][j / TILE_SIZE]))
 				mlx_put_pixel(game->mlx.img, j, i, 0x00FFFFF0);
 			else if (game->map.map[i / TILE_SIZE][j / TILE_SIZE] == '1')
 				mlx_put_pixel(game->mlx.img, j, i, 0xFFF000FF);

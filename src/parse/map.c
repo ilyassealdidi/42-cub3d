@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 12:29:06 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/18 11:59:31 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/18 15:10:23 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,10 @@ bool	is_valid_map(t_map *map)
 		j = 0;
 		while (j < map->width)
 		{
-			if (ft_strchr(" ", map->map[i][j])
-			 && ft_memchr((void *){map->map[i][j - 1], map->map[i][j + 1],
-					map->map[i - 1][j], map->map[i + 1][j]}, '0', 4))
-			{
-					return (false);
-				// if (j == 0 || j == map->width - 1
-				// || ft_strchr(map->map[i][j - 1], " ")
-				// || ft_strchr(map->map[i][j + 1], " ")
-				// || ft_strchr(map->map[i - 1][j], " ")
-				// || ft_strchr(map->map[i + 1][j], " "))
-				// 	return (false);
-			}
+			if (ft_strchr(" ", map->map[i][j]) && j > 0 && j < map->width - 1
+				&& ft_strpbrk((char [5]){map->map[i][j - 1], map->map[i][j + 1],
+				map->map[i - 1][j], map->map[i + 1][j], '\0'}, "0NSEW"))
+				return (false);
 			j++;
 		}
 		i++;

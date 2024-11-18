@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   colors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:49:42 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/18 20:27:54 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/18 21:24:12 by gmalyana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static t_color	get_color(char **rgb)
 		number = get_number(rgb[i]);
 		if (number == ERROR)
 			return (ERROR);
-		color = (color << 8) + number;
+		color = (color << 8) + number;//!
 		i++;
 	}
 	return (color);
@@ -58,9 +58,9 @@ static void	parse_color(t_game *game, t_list *node)
 	char	**rgb;
 
 	ptr = node->content + 2 + ft_strspn(node->content + 2, " ");
-	if (!ft_isdigit(*ptr) || !ft_isdigit(ft_strchr(ptr, '\0')[-1]))
+	if (!ft_isdigit(*ptr) || ft_strchr(ptr, '\0')[-1] == ',')
 		map_error(game, node, ECOLOR);
-	rgb = ft_split(ptr, ',');
+	rgb = ft_split(ptr, ',');//!
 	if (rgb == NULL)
 		clean_exit(game, 1);
 	color = get_color(rgb);

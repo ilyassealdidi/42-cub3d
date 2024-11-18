@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:49:42 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/18 20:27:54 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/18 22:12:12 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,39 +15,42 @@
 static int	get_number(char *str)
 {
 	int		number;
-	int		i;
 
-	if (str == NULL)
+	if (str == NULL || ft_strlen(str) == 0
+		|| ft_strlen(str) != ft_strspn(str, "0123456789"))
 		return (ERROR);
-	i = 0;
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (ERROR);
-		i++;
-	}
 	number = ft_atol(str);
 	if (number > 255)
 		return (ERROR);
 	return (number);
 }
 
-static t_color	get_color(char **rgb)
+static t_color	get_color(t_game *game, char *ptr)
 {
 	t_color	color;
+	char	*sub;
 	int		number;
+	int		len;
 	int		i;
 
 	color = 0;
 	i = 0;
 	while (i < 3)
 	{
-		number = get_number(rgb[i]);
+		len = ft_strcspn(ptr, ",");
+		sub = ft_substr(ptr, 0, len);
+		if (sub == NULL)
+			exit_with_error(game, NULL);
+		number = get_number(sub);
+		free(sub);
 		if (number == ERROR)
 			return (ERROR);
 		color = (color << 8) + number;
+		ptr += len + 1 * (len != 2);
 		i++;
 	}
+	if (*ptr != '\0')
+		return (ERROR);
 	return (color);
 }
 
@@ -58,13 +61,7 @@ static void	parse_color(t_game *game, t_list *node)
 	char	**rgb;
 
 	ptr = node->content + 2 + ft_strspn(node->content + 2, " ");
-	if (!ft_isdigit(*ptr) || !ft_isdigit(ft_strchr(ptr, '\0')[-1]))
-		map_error(game, node, ECOLOR);
-	rgb = ft_split(ptr, ',');
-	if (rgb == NULL)
-		clean_exit(game, 1);
-	color = get_color(rgb);
-	free_array(rgb);
+	color = get_color(game, ptr);
 	if (color == ERROR)
 		map_error(game, node, ECOLOR);
 	if (((char *)node->content)[0] == 'F' && game->settings.floor == -1)

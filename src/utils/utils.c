@@ -6,16 +6,11 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:28:16 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/14 13:08:25 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:17:33 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
-
-bool    isset(void *ptr)
-{
-    return (ptr != NULL);
-}
 
 void	clean_exit(t_game *game, int status)
 {

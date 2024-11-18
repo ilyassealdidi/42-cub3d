@@ -6,7 +6,7 @@
 /*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:19:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/18 15:40:11 by gmalyana         ###   ########.fr       */
+/*   Updated: 2024/11/18 20:35:26 by gmalyana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define EMISSCOLOR "Missing color"
 # define EMISSMAP "Missing map"
 # define EMISSINFO "Missing informations"
+# define EPLAYER "Player not found"
 
 # define ERROR -1
 # define FAILURE 0
@@ -55,6 +56,7 @@
 # define HEIGHT 720
 # define TILE_SIZE 30
 # define FOV 60
+# define SPEED 1
 # define SPEED 1
 
 typedef unsigned char	t_byte;

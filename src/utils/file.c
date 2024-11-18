@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:26:12 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/14 13:28:34 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:34:15 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_list	*read_file(int fd)
 {
 	char	*line;
 	t_list	*head;
+	t_list	*new;
 
 	head = NULL;
 	while (1)
@@ -39,12 +40,14 @@ t_list	*read_file(int fd)
 		line = get_next_line(fd);
 		if (line == NULL)
 			break ;
-		if (ft_lstappend(&head, line) == FAILURE)
+		new = ft_lstnew(line);
+		if (new == NULL)
 		{
 			free(line);
 			ft_lstclear(&head, free);
 			return (NULL);
 		}
+		ft_lstadd_back(&head, new);
 	}
 	if (head != NULL)
 		remove_newline(head);

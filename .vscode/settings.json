@@ -1,0 +1,22 @@
+{
+    "files.associations": {
+		"mlx.h": "c",
+		"cub.h": "c",
+		"libft.h": "c",
+		"types.h": "c",
+		"fcntl.h": "c",
+		"math.h": "c",
+		"stdbool.h": "c",
+		"errno.h": "c",
+		"__locale": "c",
+		"string.h": "c",
+		"unistd.h": "c",
+		"stdio.h": "c",
+		"sstream": "c",
+		"__errc": "c",
+		"mlx42.h": "c",
+		"__threading_support": "c",
+		"cerrno": "c",
+		"locale": "c"
+	}
+}

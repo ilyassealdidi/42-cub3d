@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 12:29:06 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/18 15:10:23 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/18 18:31:46 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,15 @@ bool	is_valid_map(t_map *map)
 	while (i < map->height - 1)
 	{
 		j = 0;
-		while (j < map->width)
+		while (map->map[i][j])
 		{
-			if (ft_strchr(" ", map->map[i][j]) && j > 0 && j < map->width - 1
-				&& ft_strpbrk((char [5]){map->map[i][j - 1], map->map[i][j + 1],
-				map->map[i - 1][j], map->map[i + 1][j], '\0'}, "0NSEW"))
-				return (false);
+			if (ft_strchr("NSEW0", map->map[i][j])
+				&& (j == 0 || j == map->width - 1
+				|| ft_strchr(" ", map->map[i][j - 1])
+				|| ft_strchr(" ", map->map[i][j + 1])
+				|| ft_strchr(" ", map->map[i - 1][j])
+				|| ft_strchr(" ", map->map[i + 1][j])))
+					return (false);
 			j++;
 		}
 		i++;
@@ -109,12 +112,12 @@ void	set_player_pos(t_game *game)
 		}
 		i++;
 	}
+	if (game->player.pos.x == 0)
+		exit_with_error(game, EPLAYER);
 }
 
 void	parse_map(t_game *game, t_list **list)
 {
-	while (*list != NULL && ft_strlen((*list)->content) == 0)
-		*list = (*list)->next;
 	if (*list == NULL)
 		exit_with_error(game, EMISSMAP);
 	set_map(game, *list);

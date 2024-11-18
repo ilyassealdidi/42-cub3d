@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 12:17:09 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/12 13:10:40 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/18 20:28:28 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ void	parse_textures(t_game *game, t_list **list)
 	int		i;
 
 	i = 0;
-	while (i < 4 && *list != NULL)
+	while (i < 4)
 	{
-		if (ft_strlen((*list)->content) == 0)
+		if (*list == NULL || ft_strlen((*list)->content) == 0)
 			map_error(game, *list, EMISSTEX);
 		if (!is_texture((*list)->content))
 			map_error(game, *list, EIDENTIFIER);
@@ -58,4 +58,6 @@ void	parse_textures(t_game *game, t_list **list)
 	}
 	if (!is_texture_set(&game->settings))
 		exit_with_error(game, EMISSTEX);
+	while (*list != NULL && ft_strlen((*list)->content) == 0)
+		*list = (*list)->next;
 }

@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:16:54 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/17 14:08:33 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/17 17:51:24 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ void normalize_angle(t_player *player)
 {
 	if (player->dir > 2 * M_PI)
 		player->dir -= 2 * M_PI;
-	if (player->dir < 0)
-		player->dir += 2 * M_PI;
+	// if (player->dir < 0)
+	// 	player->dir += 2 * M_PI;
 }
 
 bool	is_wall(t_game *game, double new_x, double new_y)

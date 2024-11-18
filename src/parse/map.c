@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 12:29:06 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/17 12:24:04 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/18 11:59:31 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	set_map_array(t_map *map, t_list *list)
 		map->map[i] = ft_calloc(sizeof(char), (map->width + 1));
 		if (map->map[i] == NULL)
 			return (free_array(map->map), FAILURE);
-		ft_memset(map->map[i], ' ', map->width);
+		// ft_memset(map->map[i], ' ', map->width);
 		ft_memcpy(map->map[i], list->content, ft_strlen(list->content));
 		list = list->next;
 		i++;
@@ -49,13 +49,17 @@ bool	is_valid_map(t_map *map)
 		j = 0;
 		while (j < map->width)
 		{
-			if (ft_strchr("NSEW0", map->map[i][j]))
+			if (ft_strchr(" ", map->map[i][j])
+			 && ft_memchr((void *){map->map[i][j - 1], map->map[i][j + 1],
+					map->map[i - 1][j], map->map[i + 1][j]}, '0', 4))
 			{
-				if (j == 0 || j == map->width - 1
-				|| map->map[i][j - 1] == ' ' || map->map[i][j + 1] == ' '
-				|| map->map[i][j + 1] == '\0' || map->map[i - 1][j] == ' '
-				|| map->map[i + 1][j] == ' ')
 					return (false);
+				// if (j == 0 || j == map->width - 1
+				// || ft_strchr(map->map[i][j - 1], " ")
+				// || ft_strchr(map->map[i][j + 1], " ")
+				// || ft_strchr(map->map[i - 1][j], " ")
+				// || ft_strchr(map->map[i + 1][j], " "))
+				// 	return (false);
 			}
 			j++;
 		}
@@ -88,18 +92,6 @@ void	set_map(t_game *game, t_list *list)
 		exit_with_error(game, NULL);
 }
 
-void	set_angle(t_player *player, char c)
-{
-	if (c == 'N')
-		player->dir = 3 * M_PI_2;
-	else if (c == 'S')
-		player->dir = M_PI_2;
-	else if (c == 'W')
-		player->dir = M_PI;
-	else if (c == 'E')
-		player->dir = 0;
-}
-
 void	set_player_pos(t_game *game)
 {
 	int		i;
@@ -111,7 +103,14 @@ void	set_player_pos(t_game *game)
 		ptr = ft_strpbrk(game->map.map[i], "NSEW");
 		if (ptr != NULL)
 		{
-			set_angle(&game->player, *ptr);
+			if (*ptr == 'N')
+				game->player.dir = 3 * M_PI_2;
+			else if (*ptr == 'S')
+				game->player.dir = M_PI_2;
+			else if (*ptr == 'W')
+				game->player.dir = M_PI;
+			else if (*ptr == 'E')
+				game->player.dir = 0;
 			game->player.pos.x = (ptr - game->map.map[i]) * TILE_SIZE + TILE_SIZE / 2;
 			game->player.pos.y = i * TILE_SIZE + TILE_SIZE / 2;
 			return ;

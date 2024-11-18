@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 12:29:06 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/18 15:53:52 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/18 18:31:46 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,12 +112,12 @@ void	set_player_pos(t_game *game)
 		}
 		i++;
 	}
+	if (game->player.pos.x == 0)
+		exit_with_error(game, EPLAYER);
 }
 
 void	parse_map(t_game *game, t_list **list)
 {
-	while (*list != NULL && ft_strlen((*list)->content) == 0)
-		*list = (*list)->next;
 	if (*list == NULL)
 		exit_with_error(game, EMISSMAP);
 	set_map(game, *list);

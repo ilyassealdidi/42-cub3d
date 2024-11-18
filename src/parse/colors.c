@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:49:42 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/14 13:13:38 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/18 20:27:54 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ void	parse_colors(t_game *game, t_list **list)
 	int		i;
 
 	i = 0;
-	while (i < 2 && *list != NULL)
+	while (i < 2)
 	{
-		if (ft_strlen((*list)->content) == 0)
+		if (*list == NULL || ft_strlen((*list)->content) == 0)
 			map_error(game, *list, EMISSCOLOR);
 		if (!is_color((*list)->content))
 			map_error(game, *list, EIDENTIFIER);
@@ -92,4 +92,6 @@ void	parse_colors(t_game *game, t_list **list)
 	}
 	if (!is_color_set(&game->settings))
 		exit_with_error(game, EMISSCOLOR);
+	while (*list != NULL && ft_strlen((*list)->content) == 0)
+		*list = (*list)->next;
 }

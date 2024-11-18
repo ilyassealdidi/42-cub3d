@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:19:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/18 15:43:34 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:45:21 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define EMISSCOLOR "Missing color"
 # define EMISSMAP "Missing map"
 # define EMISSINFO "Missing informations"
+# define EPLAYER "Player not found"
 
 # define ERROR -1
 # define FAILURE 0

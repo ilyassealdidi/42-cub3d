@@ -13,6 +13,10 @@
 		"unistd.h": "c",
 		"stdio.h": "c",
 		"sstream": "c",
-		"__errc": "c"
+		"__errc": "c",
+		"mlx42.h": "c",
+		"__threading_support": "c",
+		"cerrno": "c",
+		"locale": "c"
 	}
 }

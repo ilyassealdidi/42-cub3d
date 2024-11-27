@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 19:07:37 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/18 17:39:45 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/26 16:33:39 by gmalyana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@
 
 /*		Parse				*/
 void	set_defaults(t_game *game);
-void	parse_textures(t_game *game, t_list **list);
-void	parse_colors(t_game *game, t_list **list);
+void	parse_colors_textures(t_game *game, t_list **list);
 void	parse_map(t_game *game, t_list **list);
 void	game_init(t_game *game, char *filename);
+
 
 /*		Graphics			*/
 void	rungame(t_game *game);
@@ -44,6 +44,7 @@ bool	is_color(char *line);
 bool	is_texture(char *line);
 bool	is_color_set(t_settings *settings);
 bool	is_texture_set(t_settings *settings);
+int		num_char(char *ptr, char c);
 
 /*		Linked list			*/
 int 	ft_lstappend(t_list **lines, void *content);

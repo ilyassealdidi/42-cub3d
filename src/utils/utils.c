@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:28:16 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/18 17:17:33 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/26 19:16:37 by gmalyana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	clean_exit(t_game *game, int status)
 	exit(status);
 }
 
-void	free_array(char **array)
+void	free_array(char **array)   
 {
 	int		i;
 

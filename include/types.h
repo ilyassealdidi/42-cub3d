@@ -6,7 +6,7 @@
 /*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:19:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/18 20:35:26 by gmalyana         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:22:04 by gmalyana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ typedef struct s_player
 {
 	t_point		pos;
 	double		dir;
-	// double	plane;
 }	t_player;
 
 typedef struct s_file

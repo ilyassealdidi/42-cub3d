@@ -6,7 +6,7 @@
 /*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:49:42 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/26 16:59:10 by gmalyana         ###   ########.fr       */
+/*   Updated: 2024/11/27 19:57:26 by gmalyana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static int	get_number(char *str)
 {
 	int		number;
-	int		i;
 
 	i = 0;
 	while (str[i])
@@ -30,10 +29,12 @@ static int	get_number(char *str)
 	return (number);
 }
 
-static t_color	get_color(char **rgb)
+static t_color	get_color(t_game *game, char *ptr)
 {
 	t_color	color;
+	char	*sub;
 	int		number;
+	int		len;
 	int		i;
 
 	color = 0;
@@ -48,6 +49,8 @@ static t_color	get_color(char **rgb)
 		color = (color << 8) + number;//!
 		i++;
 	}
+	if (*ptr != '\0')
+		return (ERROR);
 	return (color);
 }
 static char	*parse_texture(t_game *game, t_list *node)

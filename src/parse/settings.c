@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   settings.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:49:42 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/27 19:57:26 by gmalyana         ###   ########.fr       */
+/*   Updated: 2024/11/27 23:18:56 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static int	get_number(char *str)
 {
 	int		number;
+	int		i;
 
 	i = 0;
 	while (str[i])
@@ -29,7 +30,7 @@ static int	get_number(char *str)
 	return (number);
 }
 
-static t_color	get_color(t_game *game, char *ptr)
+static t_color	get_color(char **rgb)
 {
 	t_color	color;
 	char	*sub;
@@ -37,8 +38,8 @@ static t_color	get_color(t_game *game, char *ptr)
 	int		len;
 	int		i;
 
-	color = 0;
 	i = 0;
+	color = 0;
 	while (i < 3)
 	{
 		if (rgb[i] == NULL)
@@ -46,11 +47,11 @@ static t_color	get_color(t_game *game, char *ptr)
 		number = get_number(rgb[i]);
 		if (number == ERROR)
 			return (ERROR);
-		color = (color << 8) + number;//!
+		color += number;
+		color = color << 8;
 		i++;
 	}
-	if (*ptr != '\0')
-		return (ERROR);
+	color += 255;
 	return (color);
 }
 static char	*parse_texture(t_game *game, t_list *node)

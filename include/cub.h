@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 19:07:37 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/26 16:33:39 by gmalyana         ###   ########.fr       */
+/*   Updated: 2024/11/27 22:47:19 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,25 @@ void	game_init(t_game *game, char *filename);
 
 
 /*		Graphics			*/
+void	render_map(t_game *game);
+void	move_player(void *ptr);
 void	rungame(t_game *game);
+
+/*		Player utils	*/
+bool	is_face_up(double dir);
+bool	is_face_down(double dir);
+bool	is_face_left(double dir);
+bool	is_face_right(double dir);
 
 /*		Error handling		*/
 void    exit_with_error(t_game *game, char *str);
 void	map_error(t_game *game, t_list *node, char *error);
 
+/*		Intersection		*/
+double	get_distance(t_game *game, double rayangle);
+
 /*		Utils				*/
+void	normalize_angle(double *angle);
 void	free_array(char **array);
 void	clean_exit(t_game *game, int status);
 bool	isset(void *ptr);

@@ -3,52 +3,93 @@
 /*                                                        :::      ::::::::   */
 /*   graphics.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:16:54 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/18 15:41:51 by gmalyana         ###   ########.fr       */
+/*   Updated: 2024/11/27 22:19:43 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-void	init_mlx(t_game *game)
+void	put_pixel(mlx_image_t *img, int x, int y, int color)
 {
-	game->mlx.mlx = mlx_init(game->map.width * TILE_SIZE,
-		game->map.height * TILE_SIZE, "cub3D", false);
-	if (!game->mlx.mlx)
-		exit_with_error(game, "Failed to initialize mlx");
-	game->mlx.img = mlx_new_image(game->mlx.mlx, game->map.width * TILE_SIZE, game->map.height * TILE_SIZE);
-	if (!game->mlx.img)
-		exit_with_error(game, "Failed to create window");
-	if (mlx_image_to_window(game->mlx.mlx, game->mlx.img, 0, 0) == -1)
-		exit_with_error(game, "Failed to load image to window");
-	
+	char	*dst;
+
+	if (x < 0 || x >= img->width || y < 0 || y >= img->height)
+		return ;
+	mlx_put_pixel(img, x, y, RAY_COLOR);
 }
 
-void draw_player(t_game *cube)
+void draw_player(t_game *game)
 {
-    int i;
-    int j;
-    int center_x;
-    int center_y;
-    int radius;
+    int	i;
+    int	j;
+    int	center_x;
+    int	center_y;
+    int	radius;
 
-    center_x = cube->player.pos.x;
-    center_y = cube->player.pos.y;
-	// printf("center_x = %d\n", center_x);
-	// printf("center_y = %d\n", center_y);
+    center_x = game->player.pos.x;
+    center_y = game->player.pos.y;
     radius = TILE_SIZE / 7;
-
     for (i = center_y - radius; i <= center_y + radius; i++)
     {
         for (j = center_x - radius; j <= center_x + radius; j++)
 		{
             if (pow(j - center_x, 2) + pow(i - center_y, 2) <= pow(radius, 2))
-                mlx_put_pixel(cube->mlx.img, j, i, 0xFF0000FF);
-			
+                mlx_put_pixel(game->mlx.img, j, i, PLAYER_COLOR);
 		}
     }
+}
+
+void	cast_rays(t_game *game)
+{
+	t_point	step;
+	double	rayangle;
+	double	distance;
+	int		i;
+
+	rayangle = game->player.dir - (FOV / 2);
+	if (rayangle < 0)
+		rayangle += 2 * M_PI;
+	i = 0;
+	while (i < game->mlx.width)
+	{
+		distance = get_distance(game, rayangle);
+		int j = -1;
+		while (++j < distance)
+			put_pixel(game->mlx.img, game->player.pos.x + cos(rayangle) * j, game->player.pos.y + sin(rayangle) * j, RAY_COLOR);
+		rayangle += FOV / game->mlx.width;
+		i++;
+	}
+}
+
+void	draw_background(t_game *game)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	while (i < game->mlx.height / 2)
+	{
+		j = 0;
+		while (j < game->mlx.width)
+		{
+			mlx_put_pixel(game->mlx.img, j, i, game->settings.ceiling);
+			j++;
+		}
+		i++;
+	}
+	while (i < game->mlx.height)
+	{
+		j = 0;
+		while (j < game->mlx.width)
+		{
+			mlx_put_pixel(game->mlx.img, j, i, game->settings.floor);
+			j++;
+		}
+		i++;
+	}
 }
 
 void	render_map(t_game *game)
@@ -57,95 +98,38 @@ void	render_map(t_game *game)
 	int		j;
 
 	i = 0;
-	while (i < game->map.height * TILE_SIZE)
+	while (i < game->mlx.height)
 	{
 		j = 0;
-		while (j < game->map.width * TILE_SIZE)
+		while (j < game->mlx.width)
 		{
-			if (ft_strchr("NSWE0 ", game->map.map[i / TILE_SIZE][j / TILE_SIZE]))
-				mlx_put_pixel(game->mlx.img, j, i, 0x00FFFFF0);
-			else if (game->map.map[i / TILE_SIZE][j / TILE_SIZE] == '1')
-				mlx_put_pixel(game->mlx.img, j, i, 0xFFF000FF);
+			if (ft_memchr("NSWE0 ", game->map.map[i / TILE_SIZE][j / TILE_SIZE], 6))
+				mlx_put_pixel(game->mlx.img, j, i, SPACE_COLOR);
+			else
+				mlx_put_pixel(game->mlx.img, j, i, WALL_COLOR);
 			j++;
 		}
 		i++;
 	}
+	draw_background(game);
 	draw_player(game);
+	cast_rays(game);
 }
 
-void normalize_angle(t_player *player)
+void	init_mlx(t_game *game)
 {
-	if (player->dir > 2 * M_PI)
-		player->dir -= 2 * M_PI;
-	// if (player->dir < 0)
-	// 	player->dir += 2 * M_PI;
+	game->mlx.height = game->map.rows * TILE_SIZE;
+	game->mlx.width = game->map.columns * TILE_SIZE;
+	game->mlx.mlx = mlx_init(game->mlx.width, game->mlx.height, WIN_TITLE, false);
+	if (game->mlx.mlx == NULL)
+		exit_with_error(game, "Failed to initialize mlx");
+	game->mlx.img = mlx_new_image(game->mlx.mlx, game->mlx.width, game->mlx.height);
+	if (game->mlx.img == NULL)
+		exit_with_error(game, "Failed to create window");
+	if (mlx_image_to_window(game->mlx.mlx, game->mlx.img, 0, 0) == -1)
+		exit_with_error(game, "Failed to load image to window");
 }
 
-bool	is_wall(t_game *game, double new_x, double new_y)
-{
-	int		x;
-	int		y;
-
-	x = new_x / TILE_SIZE + game->player.pos.x / TILE_SIZE;
-	y = new_y / TILE_SIZE + game->player.pos.y / TILE_SIZE;
-	if (x < 0 || y < 0 || x >= game->map.width || y >= game->map.height)
-		return (true);
-	if (game->map.map[y][x] == '1')
-		return (true);
-	return (false);
-}
-
-void move_player (void *ptr)
-{
-	t_game *game = (t_game *)ptr;
-	double new_x;
-	double new_y;
-
-	new_x = cos (game->player.dir) * SPEED;
-	new_y = sin (game->player.dir) * SPEED;
-	if (mlx_is_key_down(game->mlx.mlx, MLX_KEY_W) == true)
-	{
-		if (is_wall(game, new_x, new_y) == false)
-		{
-			game->player.pos.x += new_x;
-			game->player.pos.y += new_y;
-		}
-		// game->player.pos.x += cos(game->player.dir) * SPEED;
-		// game->player.pos.y += sin(game->player.dir) * SPEED;
-	}
-	if (mlx_is_key_down(game->mlx.mlx, MLX_KEY_S) == true)
-	{
-		if (is_wall(game, -new_x, -new_y) == false)
-		{
-			game->player.pos.x -= cos(game->player.dir) * SPEED;
-			game->player.pos.y -= sin(game->player.dir) * SPEED;
-		}
-	}
-	if (mlx_is_key_down(game->mlx.mlx, MLX_KEY_A) == true)
-	{
-		if (is_wall(game, new_y, new_x) == false)
-		{
-			game->player.pos.x += sin(game->player.dir) * SPEED;
-			game->player.pos.y += cos(game->player.dir) * SPEED;
-		}
-	}
-	if (mlx_is_key_down(game->mlx.mlx, MLX_KEY_D) == true)
-	{
-		if (is_wall(game, -new_y, -new_x) == false)
-		{
-			game->player.pos.x -= sin(game->player.dir) * SPEED;
-			game->player.pos.y -= cos(game->player.dir) * SPEED;
-		}
-		// game->player.pos.x -= sin(game->player.dir) * SPEED;
-		// game->player.pos.y -= cos(game->player.dir) * SPEED;
-	}
-	if (mlx_is_key_down(game->mlx.mlx, MLX_KEY_LEFT) == true)
-		game->player.dir -= 2 * M_PI / 180;
-	if (mlx_is_key_down(game->mlx.mlx, MLX_KEY_RIGHT) == true)
-		game->player.dir += 2 * M_PI / 180;
-	normalize_angle(&game->player);
-	render_map(game);
-}
 void	rungame(t_game *game)
 {
 	init_mlx(game);

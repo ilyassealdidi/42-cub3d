@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 12:29:06 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/26 21:46:13 by gmalyana         ###   ########.fr       */
+/*   Updated: 2024/11/27 22:46:47 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,15 @@ int	set_map_array(t_map *map, t_list *list)
 	int		j;
 	char	*line;
 
-	map->map = ft_calloc(sizeof(char *), (map->height + 1));
+	map->map = ft_calloc(sizeof(char *), (map->rows + 1));
 	if (map->map == NULL)
 		return (FAILURE);
 	i = 0;
-	while (i < map->height)
+	while (i < map->rows)
 	{
-		map->map[i] = ft_calloc(sizeof(char), (map->width + 1));
+		map->map[i] = ft_calloc(sizeof(char), (map->columns + 1));
 		if (map->map[i] == NULL)
 			return (free_array(map->map), FAILURE);
-		// ft_memset(map->map[i], ' ', map->width);
 		ft_memcpy(map->map[i], list->content, ft_strlen(list->content));
 		list = list->next;
 		i++;
@@ -41,16 +40,16 @@ bool	is_valid_map(t_map *map)
 	int		j;
 
 	if (ft_strpbrk(map->map[0], "0NSEW") != NULL
-		|| ft_strpbrk(map->map[map->height - 1], "0NSEW") != NULL)
+		|| ft_strpbrk(map->map[map->rows - 1], "0NSEW") != NULL)
 		return (false);
 	i = 1;
-	while (i < map->height - 1)
+	while (i < map->rows - 1)
 	{
 		j = 0;
 		while (map->map[i][j])
 		{
 			if (ft_strchr("NSEW0", map->map[i][j])
-				&& (j == 0 || j == map->width - 1
+				&& (j == 0 || j == map->columns - 1
 				|| ft_strchr(" ", map->map[i][j - 1])
 				|| ft_strchr(" ", map->map[i][j + 1])
 				|| ft_strchr(" ", map->map[i - 1][j])
@@ -70,8 +69,8 @@ void	set_map(t_game *game, t_list *list)
 	int		len;
 
 	tmp = list;
-	game->map.height = ft_lstsize(list);
-	if (game->map.height < 3)
+	game->map.rows = ft_lstsize(list);
+	if (game->map.rows < 3)
 		exit_with_error(game, EINVALIDMAP);
 	while (list != NULL)
 	{
@@ -79,8 +78,8 @@ void	set_map(t_game *game, t_list *list)
 		len = ft_strlen(line);
 		if (len == 0 || ft_strspn(line, " 10NSEW") != ft_strlen(line))
 			map_error(game, list, EINVALIDMAP);
-		if (len > game->map.width)
-			game->map.width = len;
+		if (len > game->map.columns)
+			game->map.columns = len;
 		list = list->next;
 	}
 	if (set_map_array(&game->map, tmp) == FAILURE)

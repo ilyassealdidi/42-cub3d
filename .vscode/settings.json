@@ -18,6 +18,9 @@
 		"__threading_support": "c",
 		"cerrno": "c",
 		"locale": "c",
-		"__node_handle": "c"
+		"__node_handle": "c",
+		"__tuple": "c",
+		"array": "c",
+		"algorithm": "c"
 	}
 }

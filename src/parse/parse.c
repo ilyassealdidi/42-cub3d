@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:38:35 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/25 21:53:36 by gmalyana         ###   ########.fr       */
+/*   Updated: 2024/11/28 23:51:27 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
-
 
 static void	set_game_file(t_game *game, char *filename)
 {
@@ -34,6 +33,7 @@ static void	set_game_file(t_game *game, char *filename)
 	if (game->file.lines == NULL)
 		exit_with_error(game, EEMPTY);
 }
+
 static void	parse_settings(t_game *game, t_list **ptr)
 {
 	if (is_color(game->file.lines->content) || is_texture(game->file.lines->content))

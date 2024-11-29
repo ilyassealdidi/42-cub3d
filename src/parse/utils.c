@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:31:13 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/26 16:33:02 by gmalyana         ###   ########.fr       */
+/*   Updated: 2024/11/28 23:55:46 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	set_defaults(t_game *game)
 	game->settings.floor = -1;
 	game->settings.ceiling = -1;
 }
+
 int num_char(char *ptr, char c)
 {
 	int i;
@@ -39,7 +40,8 @@ bool	is_color(char *line)
 {
 	if (line == NULL)
 		return (false);
-	return (ft_strncmp(line, "F ", 2) == 0 || ft_strncmp(line, "C ", 2) == 0);
+	return (ft_strncmp(line, "F ", 2) == 0
+		|| ft_strncmp(line, "C ", 2) == 0);
 }
 
 bool	is_texture(char *line)
@@ -54,12 +56,15 @@ bool	is_texture(char *line)
 
 bool is_color_set(t_settings *settings)
 {
-	return (settings->floor != -1 && settings->ceiling != -1);
+	return (settings->floor != -1
+		&& settings->ceiling != -1);
 }
 
 bool is_texture_set(t_settings *settings)
 {
-	return (settings->north != NULL && settings->south != NULL
-		&& settings->west != NULL && settings->east != NULL);
+	return (settings->north != NULL
+		&& settings->south != NULL
+		&& settings->west != NULL
+		&& settings->east != NULL);
 }
 

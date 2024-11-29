@@ -3,23 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   file.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:26:12 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/24 19:50:16 by gmalyana         ###   ########.fr       */
+/*   Updated: 2024/11/28 23:50:09 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-void	file_error(t_game *game, char *filename)
-{
-	ft_printf(RED"Error\n"RESET);
-	perror(filename);
-	clean_exit(game, EXIT_FAILURE);
-}
-
-void	remove_newline(t_list *list)
+static void	remove_newline(t_list *list)
 {
 	while (list->next)
 	{

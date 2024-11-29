@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   err.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:42:27 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/26 21:19:35 by gmalyana         ###   ########.fr       */
+/*   Updated: 2024/11/28 23:57:34 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void    exit_with_error(t_game *game, char *error)
 	clean_exit(game, 1);
 }
 
-int	get_line_number(t_list *list)
+static int	get_line_number(t_list *list)
 {
 	int		i;
 
@@ -62,4 +62,11 @@ void	map_error(t_game *game, t_list *node, char *error)
 	}
 	ft_dprintf(2, "\n");
 	clean_exit(game, 1);
+}
+
+void	file_error(t_game *game, char *filename)
+{
+	ft_printf(RED"Error\n"RESET);
+	perror(filename);
+	clean_exit(game, EXIT_FAILURE);
 }

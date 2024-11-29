@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gmalyana <gmalyana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:28:16 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/26 19:16:37 by gmalyana         ###   ########.fr       */
+/*   Updated: 2024/11/29 01:36:22 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ void	clean_exit(t_game *game, int status)
 	ft_lstclear(&game->file.lines, free);
 	if (game->map.map != NULL)
 		free_array(game->map.map);
+	if (game->mlx.mlx != NULL)
+	{
+		mlx_close_window(game->mlx.mlx);
+		mlx_terminate(game->mlx.mlx);
+	}
 	exit(status);
 }
 

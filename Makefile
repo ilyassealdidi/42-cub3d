@@ -8,7 +8,7 @@ MLX_DIR			= lib/MLX42/
 LIBFT			= $(LIBFT_DIR)libft.a
 MLX				= $(MLX_DIR)build/libmlx42.a
 CFLAGS			= -I$(INCS_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)include/MLX42
-CFLAGS			+= -g -fsanitize=address  #l -Werror -Wextra -Wunreachable-code
+CFLAGS			+= -Wall -Werror -Wextra -g -fsanitize=address
 NAME			= cub3D
 RM				= rm -rf
 all:			$(NAME)

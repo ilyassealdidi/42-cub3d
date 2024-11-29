@@ -6,17 +6,15 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 12:29:06 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/27 22:46:47 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/29 00:03:00 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-int	set_map_array(t_map *map, t_list *list)
+static int	set_map_array(t_map *map, t_list *list)
 {
 	int		i;
-	int		j;
-	char	*line;
 
 	map->map = ft_calloc(sizeof(char *), (map->rows + 1));
 	if (map->map == NULL)
@@ -34,7 +32,7 @@ int	set_map_array(t_map *map, t_list *list)
 	return (SUCCESS);
 }
 
-bool	is_valid_map(t_map *map)
+static bool	is_valid_map(t_map *map)
 {
 	int		i;
 	int		j;
@@ -62,7 +60,7 @@ bool	is_valid_map(t_map *map)
 	return (true);
 }
 
-void	set_map(t_game *game, t_list *list)
+static void	set_map(t_game *game, t_list *list)
 {
 	char	*line;
 	t_list	*tmp;
@@ -86,17 +84,19 @@ void	set_map(t_game *game, t_list *list)
 		exit_with_error(game, NULL);
 }
 
-void	set_player_pos(t_game *game)
+static void	set_player_pos(t_game *game)
 {
 	int		i;
 	char	*ptr;
 
-	i = 0;
-	while (game->map.map[i])
+	i = -1;
+	while (game->map.map[++i])
 	{
 		ptr = ft_strpbrk(game->map.map[i], "NSEW");
 		if (ptr != NULL)
 		{
+			if (game->player.pos.x != 0)
+				exit_with_error(game, EPLAYERSET);
 			if (*ptr == 'N')
 				game->player.dir = 3 * M_PI_2;
 			else if (*ptr == 'S')
@@ -105,14 +105,11 @@ void	set_player_pos(t_game *game)
 				game->player.dir = M_PI;
 			else if (*ptr == 'E')
 				game->player.dir = 0;
-			game->player.pos.x = (ptr - game->map.map[i]) * TILE_SIZE + TILE_SIZE / 2;
-			game->player.pos.y = i * TILE_SIZE + TILE_SIZE / 2;
-			return ;
+			set_point(&game->player.pos,
+				(ptr - game->map.map[i]) * TILE_SIZE + TILE_SIZE / 2,
+				i * TILE_SIZE + TILE_SIZE / 2);
 		}
-		i++;
 	}
-	if (game->player.pos.x == 0)
-		exit_with_error(game, EPLAYER);
 }
 
 void	parse_map(t_game *game, t_list **list)
@@ -121,6 +118,8 @@ void	parse_map(t_game *game, t_list **list)
 		exit_with_error(game, EMISSMAP);
 	set_map(game, *list);
 	set_player_pos(game);
-	if (is_valid_map(&game->map) == FAILURE)
+	if (game->player.pos.x == 0)
+		exit_with_error(game, EPLAYER);
+	if (!is_valid_map(&game->map))
 		exit_with_error(game, EINVALIDMAP);
 }

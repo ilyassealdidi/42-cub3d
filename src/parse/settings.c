@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:49:42 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/27 23:18:56 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/28 23:53:37 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,10 @@ static int	get_number(char *str)
 	return (number);
 }
 
-static t_color	get_color(char **rgb)
+static int	get_color(char **rgb)
 {
-	t_color	color;
-	char	*sub;
+	int		color;
 	int		number;
-	int		len;
 	int		i;
 
 	i = 0;
@@ -54,6 +52,7 @@ static t_color	get_color(char **rgb)
 	color += 255;
 	return (color);
 }
+
 static char	*parse_texture(t_game *game, t_list *node)
 {
 	char	*texture;
@@ -78,6 +77,7 @@ static char	*parse_texture(t_game *game, t_list *node)
 	}
 	return (texture);
 }
+
 static void	parse_color(t_game *game, t_list *node)
 {
 	char	*ptr;

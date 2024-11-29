@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:19:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/27 22:45:59 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/28 23:13:07 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 # define USAGE "Usage: ./cub3D [map.cub]"
 
 # define WIN_TITLE "cub3D"
-
+# define WIN_WIDTH 800
+# define WIN_HEIGHT 600
 # define EOPEN "Can't open file"
 # define EEMPTY "Empty file"
 # define ESEP "Expected empty line"
@@ -25,6 +26,7 @@
 # define ECOLOR "Invalid color"
 # define ETEXSET "Texture already set"
 # define ECOLORSET "Color already set"
+# define EPLAYERSET "Multiple players in the map"
 # define EIDENTIFIER "Invalid identifier"
 # define EINVALIDMAP "Invalid map"
 # define EMISSTEX "Missing texture"
@@ -63,11 +65,8 @@
 # define FOV 60 * (M_PI / 180)
 # define WALL_STRIP_WIDTH 1
 # define RAYS WIDTH / WALL_STRIP_WIDTH
-# define SPEED 3
-# define ROTATION_SPEED 3 * (M_PI / 180)
-
-typedef unsigned char	t_byte;
-typedef int				t_color;
+# define SPEED 4
+# define ROTATION_SPEED 2 * (M_PI / 180)
 
 typedef struct s_settings
 {
@@ -75,8 +74,8 @@ typedef struct s_settings
 	char		*south;
 	char		*west;
 	char		*east;
-	t_color		floor;
-	t_color		ceiling;
+	int		floor;
+	int		ceiling;
 }	t_settings;
 
 typedef struct s_point
@@ -107,8 +106,6 @@ typedef struct s_mlx
 {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
-	int			height;
-	int			width;
 }	t_mlx;
 
 typedef struct s_game
@@ -118,10 +115,6 @@ typedef struct s_game
 	t_settings	settings;
 	t_map		map;
 	t_player	player;
-	t_list		*current_line;
 }	t_game;
 
 #endif
-
-// l7uub : 1,140
-// Ana : 1,328

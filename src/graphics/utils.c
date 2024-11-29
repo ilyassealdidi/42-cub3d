@@ -6,17 +6,16 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:51:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/27 18:51:30 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/28 23:57:52 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-void	normalize_angle(double *angle)
+void	set_point(t_point *point, double x, double y)
 {
-	*angle = fmod(*angle, 2 * M_PI);
-	if (*angle < 0)
-		*angle += 2 * M_PI;
+	point->x = x;
+	point->y = y;
 }
 
 inline bool	is_face_up(double dir)

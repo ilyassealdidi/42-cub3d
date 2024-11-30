@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 19:07:37 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/30 14:24:59 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/30 18:22:28 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ int		num_char(char *ptr, char c);
 void	key_hook(void *ptr);
 void	render_map(void *ptr);
 void	rungame(t_game *game);
+
+/*		Graphics utils		*/
+void	close_hook(void *param);
+int		get_texture_color(t_game *game, int y, double wall_height, double x);
+double	get_x(t_game *game);
 
 /*		Intersection		*/
 double	get_distance(t_game *game);

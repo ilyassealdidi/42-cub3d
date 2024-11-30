@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 17:07:47 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/30 14:24:50 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/30 18:08:36 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,13 @@ static double	get_horizontal_intersection(t_game *game, double rayangle)
 		+ is_face_down(rayangle)) * TILE_SIZE;
 	intersect.x = game->player.pos.x
 		+ (intersect.y - game->player.pos.y) / tan(rayangle);
-	intersect.y -= is_face_up(rayangle);
+	step.y = TILE_SIZE * (1 - 2 * is_face_up(rayangle));
 	step.x = TILE_SIZE / tan(rayangle);
 	if (step.x < 0 && is_face_right(rayangle))
 		step.x = -step.x;
 	else if (step.x > 0 && is_face_left(rayangle))
 		step.x = -step.x;
-	step.y = TILE_SIZE * (1 - 2 * is_face_up(rayangle));
-	while (!is_wall(game, intersect.x, intersect.y))
+	while (!is_wall(game, intersect.x, intersect.y - is_face_up(rayangle)))
 	{
 		intersect.x += step.x;
 		intersect.y += step.y;
@@ -62,8 +61,7 @@ static double	get_vertical_intersection(t_game *game, double rayangle)
 		step.y = -step.y;
 	else if (step.y > 0 && is_face_up(rayangle))
 		step.y = -step.y;
-	intersect.x -= is_face_left(rayangle);
-	while (!(is_wall(game, intersect.x, intersect.y)))
+	while (!(is_wall(game, intersect.x - is_face_left(rayangle), intersect.y)))
 	{
 		intersect.x += step.x;
 		intersect.y += step.y;

@@ -6,11 +6,19 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:38:35 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/28 23:51:27 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/30 01:35:20 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
+
+void	set_defaults(t_game *game)
+{
+	errno = 0;
+	ft_memset(game, 0, sizeof(t_game));
+	game->settings.floor = -1;
+	game->settings.ceiling = -1;
+}
 
 static void	set_game_file(t_game *game, char *filename)
 {

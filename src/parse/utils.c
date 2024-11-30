@@ -6,19 +6,11 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:31:13 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/28 23:55:46 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/30 14:06:41 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
-
-void	set_defaults(t_game *game)
-{
-	errno = 0;
-	ft_memset(game, 0, sizeof(t_game));
-	game->settings.floor = -1;
-	game->settings.ceiling = -1;
-}
 
 int num_char(char *ptr, char c)
 {
@@ -62,9 +54,8 @@ bool is_color_set(t_settings *settings)
 
 bool is_texture_set(t_settings *settings)
 {
-	return (settings->north != NULL
-		&& settings->south != NULL
-		&& settings->west != NULL
-		&& settings->east != NULL);
+	return (settings->textures[NORTH] != NULL
+		&& settings->textures[SOUTH] != NULL
+		&& settings->textures[EAST] != NULL
+		&& settings->textures[WEST] != NULL);
 }
-

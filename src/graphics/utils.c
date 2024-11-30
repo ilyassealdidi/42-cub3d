@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:51:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/28 23:57:52 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/30 15:08:23 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	set_point(t_point *point, double x, double y)
 
 inline bool	is_face_up(double dir)
 {
-	return (dir > M_PI && dir <= 2 * M_PI);
+	return (dir >= M_PI && dir <= 2 * M_PI);
 }
 
 inline bool	is_face_right(double dir)

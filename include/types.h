@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:19:39 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/28 23:13:07 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/30 14:25:24 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define EMAP "Invalid map"
 # define ECOLOR "Invalid color"
 # define ETEXSET "Texture already set"
+# define ETEXLOAD "Texture loading error"
 # define ECOLORSET "Color already set"
 # define EPLAYERSET "Multiple players in the map"
 # define EIDENTIFIER "Invalid identifier"
@@ -64,18 +65,21 @@
 # define TILE_SIZE 50
 # define FOV 60 * (M_PI / 180)
 # define WALL_STRIP_WIDTH 1
+# define DIST_PROJ (WIN_WIDTH / 2) / tan(FOV / 2)
 # define RAYS WIDTH / WALL_STRIP_WIDTH
 # define SPEED 4
 # define ROTATION_SPEED 2 * (M_PI / 180)
 
+# define NORTH 0
+# define SOUTH 1
+# define WEST 2
+# define EAST 3
+
 typedef struct s_settings
 {
-	char		*north;
-	char		*south;
-	char		*west;
-	char		*east;
-	int		floor;
-	int		ceiling;
+	mlx_texture_t	*textures[4];
+	int				floor;
+	int				ceiling;
 }	t_settings;
 
 typedef struct s_point
@@ -83,6 +87,7 @@ typedef struct s_point
 	double		x;
 	double		y;
 }	t_point;
+
 typedef struct s_map
 {
 	char		**map;
@@ -115,6 +120,12 @@ typedef struct s_game
 	t_settings	settings;
 	t_map		map;
 	t_player	player;
+	t_point		ray;
+	double		rayangle;
+	t_point		ray_h;
+	t_point		ray_v;
+	int			i;
+	bool 		is_horizontal;
 }	t_game;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:49:42 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/28 23:53:37 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/30 14:06:15 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,29 +53,28 @@ static int	get_color(char **rgb)
 	return (color);
 }
 
-static char	*parse_texture(t_game *game, t_list *node)
+static void	parse_texture(t_game *game, t_list *node)
 {
-	char	*texture;
-	char	*line;
+	mlx_texture_t	*texture;
 
-	line = node->content + 2 + ft_strspn(node->content + 2, " ");
-	texture = ft_strdup(line);
+	texture = mlx_load_png(node->content + 2
+		+ ft_strspn(node->content + 2, " "));
 	if (texture == NULL)
-		exit_with_error(game, NULL);
-	if (*(char *)(node->content) == 'N' && game->settings.north == NULL)
-		game->settings.north = texture;
-	else if (*(char *)(node->content) == 'S' && game->settings.south == NULL)
-		game->settings.south = texture;
-	else if (*(char *)(node->content) == 'W' && game->settings.west == NULL)
-		game->settings.west = texture;
-	else if (*(char *)(node->content) == 'E' && game->settings.east == NULL)
-		game->settings.east = texture;
+		map_error(game, node, ETEXLOAD);
+	if (*(char *)(node->content) == 'N'
+		&& !game->settings.textures[NORTH])
+		game->settings.textures[NORTH] = texture;
+	else if (*(char *)(node->content) == 'S'
+		&& !game->settings.textures[SOUTH])
+		game->settings.textures[SOUTH] = texture;
+	else if (*(char *)(node->content) == 'W'
+		&& !game->settings.textures[WEST])
+		game->settings.textures[WEST] = texture;
+	else if (*(char *)(node->content) == 'E'
+		&& !game->settings.textures[EAST])
+		game->settings.textures[EAST] = texture;
 	else
-	{
-		free(texture);
 		map_error(game, node, ETEXSET);
-	}
-	return (texture);
 }
 
 static void	parse_color(t_game *game, t_list *node)
@@ -104,19 +103,12 @@ static void	parse_color(t_game *game, t_list *node)
 
 void	parse_colors_textures(t_game *game, t_list **list)
 {
-	int		fd;
-
 	while (is_color((*list)->content) || is_texture((*list)->content))
 	{
 		if(is_color((*list)->content))
 			parse_color(game, *list);
 		else
-		{
-			fd = open(parse_texture(game, *list), O_RDONLY);
-			if (fd == -1)
-				map_error(game, *list, EOPEN);
-			close(fd);
-		}
+			parse_texture(game, *list);
 		*list = (*list)->next;
 		while ((*list) != NULL && ft_strlen((*list)->content) == 0)
 			*list = (*list)->next;

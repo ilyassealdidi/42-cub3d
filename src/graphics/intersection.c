@@ -6,13 +6,13 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 17:07:47 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/27 18:58:08 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/30 14:24:50 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub.h>
 
-bool	is_wall_2(t_game *game, double x, double y)
+static bool	is_wall(t_game *game, double x, double y)
 {
 	int		i;
 	int		j;
@@ -39,11 +39,12 @@ static double	get_horizontal_intersection(t_game *game, double rayangle)
 	else if (step.x > 0 && is_face_left(rayangle))
 		step.x = -step.x;
 	step.y = TILE_SIZE * (1 - 2 * is_face_up(rayangle));
-	while (!is_wall_2(game, intersect.x, intersect.y))
+	while (!is_wall(game, intersect.x, intersect.y))
 	{
 		intersect.x += step.x;
 		intersect.y += step.y;
 	}
+	game->ray_h = intersect;
 	return (sqrt(pow(intersect.x - game->player.pos.x, 2)
 		+ pow(intersect.y - game->player.pos.y, 2)));
 }
@@ -62,23 +63,36 @@ static double	get_vertical_intersection(t_game *game, double rayangle)
 	else if (step.y > 0 && is_face_up(rayangle))
 		step.y = -step.y;
 	intersect.x -= is_face_left(rayangle);
-	while (!(is_wall_2(game, intersect.x, intersect.y)))
+	while (!(is_wall(game, intersect.x, intersect.y)))
 	{
 		intersect.x += step.x;
 		intersect.y += step.y;
 	}
+	game->ray_v = intersect;
 	return (sqrt(pow(intersect.x - game->player.pos.x, 2)
 		+ pow(intersect.y - game->player.pos.y, 2)));
 }
 
-double	get_distance(t_game *game, double rayangle)
+double	get_distance(t_game *game)
 {
+	double	rayangle;
+	double	distance;
 	double	hdistance;
 	double	vdistance;
 
+	rayangle = game->rayangle;
 	hdistance = get_horizontal_intersection(game, rayangle);
 	vdistance = get_vertical_intersection(game, rayangle);
 	if (hdistance < vdistance)
-		return (hdistance);
-	return (vdistance);
+	{
+		distance = hdistance;
+		game->ray = game->ray_h;
+	}
+	else
+	{
+		distance = vdistance;
+		game->ray = game->ray_v;
+	}
+	game->is_horizontal = hdistance < vdistance;
+	return (distance * cos(game->player.dir - rayangle));
 }

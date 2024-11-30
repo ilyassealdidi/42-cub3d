@@ -6,7 +6,7 @@
 /*   By: ialdidi <ialdidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 19:07:37 by ialdidi           #+#    #+#             */
-/*   Updated: 2024/11/29 17:08:32 by ialdidi          ###   ########.fr       */
+/*   Updated: 2024/11/30 14:24:59 by ialdidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	render_map(void *ptr);
 void	rungame(t_game *game);
 
 /*		Intersection		*/
-double	get_distance(t_game *game, double rayangle);
+double	get_distance(t_game *game);
 
 /*		Player utils	*/
 bool	is_face_up(double dir);
